@@ -207,12 +207,11 @@ export const engineeringPhilosophy = {
 };
 
 export const stack = [
-  { group: 'Backend', items: ['Node.js', 'Express.js', 'JavaScript', 'REST APIs', 'Socket.IO'] },
-  { group: 'Data', items: ['MongoDB', 'Mongoose', 'Redis'] },
+  { group: 'Backend', items: ['Node.js', 'Express.js', 'JavaScript', 'REST APIs', 'Socket.IO', 'Git / GitHub', 'Postman'] },
+  { group: 'Data', items: ['MongoDB', 'Mongoose', 'Redis', 'SQL', 'PostgreSQL'] },
   { group: 'Infrastructure', items: ['Docker', 'Nginx', 'PM2', 'VPS', 'Cloudflare', 'AWS S3'] },
   { group: 'Geospatial', items: ['MapTiler', 'MBTiles', 'GIS applications'] },
-  { group: 'Development', items: ['Git / GitHub', 'Postman'] },
-  { group: 'Product Integration', items: ['React', 'MERN ecosystem'] },
+  { group: 'Product', items: ['React', 'MERN ecosystem'] },
 ];
 
 export const experience = {
