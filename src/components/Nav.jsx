@@ -37,7 +37,7 @@ export default function Nav() {
           <span className="nav-mark relative grid h-10 w-10 place-items-center overflow-hidden rounded-xl border border-signal/20 bg-signal/[0.07] transition-all group-hover:border-signal/45 group-hover:bg-signal/[0.11]"><span className="relative">JK<span className="text-signal">.</span></span></span>
           <span className="hidden sm:block">
             <span className="block text-sm leading-none text-paper">Jaimin Katva</span>
-            <span className="mt-1.5 flex items-center gap-1.5 font-mono text-xs font-normal leading-none tracking-wide text-paper-faint"><span className="h-1.5 w-1.5 rounded-full bg-system shadow-[0_0_8px_#5EC8D8]" />Systems engineer</span>
+            <span className="mt-1.5 flex items-center gap-1.5 font-mono text-xs font-normal leading-none tracking-wide text-paper-faint"><span className="h-1.5 w-1.5 rounded-full bg-system" />Backend Engineer · Team Lead</span>
           </span>
         </a>
 

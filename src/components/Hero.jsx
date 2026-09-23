@@ -44,7 +44,7 @@ export default function Hero() {
       ref={sectionRef}
       id="top"
       onPointerMove={handlePointerMove}
-      className="hero-shell relative flex min-h-[760px] items-center overflow-hidden pb-20 pt-28 md:min-h-screen md:pb-24 md:pt-32"
+      className="hero-shell relative flex min-h-[700px] items-center overflow-hidden pb-16 pt-28 md:min-h-[90vh] md:pb-20 md:pt-32"
     >
       <div className="absolute inset-0 bp-grid opacity-60 [mask-image:radial-gradient(ellipse_75%_70%_at_50%_30%,black,transparent)]" />
       <div className="hero-aurora absolute -right-24 top-0 h-[540px] w-[540px] rounded-full bg-signal/[0.09] blur-[110px]" />
@@ -58,7 +58,7 @@ export default function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal opacity-60" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal" />
             </span>
-            Backend · Architecture · Product
+            {hero.kicker}
           </motion.div>
 
           <motion.h1 variants={item} className="max-w-[760px] font-display text-[clamp(3.2rem,7vw,6.6rem)] font-medium leading-[0.92] tracking-[-0.055em] text-paper">
@@ -88,14 +88,6 @@ export default function Hero() {
             </MagneticButton>
           </motion.div>
 
-          <motion.div variants={item} className="mt-12 grid max-w-lg grid-cols-3 border-t border-white/[0.08] pt-5">
-            {['APIs', 'Architecture', 'Infrastructure'].map((label, index) => (
-              <div key={label} className={index ? 'border-l border-white/[0.08] pl-4 sm:pl-6' : ''}>
-                <span className="block font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">0{index + 1}</span>
-                <span className="mt-1 block font-display text-sm text-paper-dim">{label}</span>
-              </div>
-            ))}
-          </motion.div>
         </motion.div>
 
         <motion.div

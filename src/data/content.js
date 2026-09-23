@@ -4,17 +4,18 @@
 
 export const identity = {
   name: 'Jaimin Katva',
-  roles: ['Backend Engineer', 'Team Lead', 'Product Builder'],
+  title: 'Backend Engineer · Team Lead',
+  roles: ['Backend Engineer', 'Team Lead'],
   brandSentence: 'I turn real business needs into reliable software systems.',
   linkedin: 'https://linkedin.com/in/jaiminkatva/',
-  email: null, // TODO: add public email
-  github: null, // TODO: add GitHub profile
+  email: 'jaiminkatva@gmail.com',
+  github: 'https://github.com/jaiminkatva',
 };
 
 export const hero = {
-  kicker: 'Backend Engineer · Team Lead · Product Builder',
+  kicker: 'BACKEND · ARCHITECTURE · PRODUCT',
   headline: 'I build reliable systems that power products.',
-  sub: 'I turn business needs into secure, scalable backend systems—from APIs and databases to deployment and ongoing improvement.',
+  sub: 'I turn business needs into reliable backend systems—from APIs and databases to deployment and production.',
   tags: ['Node.js', 'System Design', 'MongoDB', 'Docker', 'GIS'],
   ctaPrimary: { label: 'View selected work', href: '#work' },
   ctaSecondary: { label: "Let's work together", href: '#contact' },
@@ -23,41 +24,23 @@ export const hero = {
 export const about = {
   eyebrow: 'About',
   paragraphs: [
-    "I'm Jaimin Katva, a backend engineer and Team Lead. I plan and build the technical systems that make digital products work—from the first idea to a production release.",
-    'My main tools are Node.js, Express.js and MongoDB. I also work with real-time communication, cloud storage, deployment infrastructure and GIS mapping applications.',
-    'Most of my experience comes from solving real business problems: managing customers and leads, organizing land and project records, automating HR work, processing orders and presenting data on maps.',
-    'I enjoy taking a complicated process, breaking it into clear parts and building software that people can use, maintain and improve over time.',
+    "I'm Jaimin Katva, a Backend Engineer · Team Lead responsible for planning systems, building core services and guiding delivery from requirements to production.",
+    'My experience comes from operational software: connecting sales and land records, automating HR workflows, serving map data and turning fragmented processes into usable products.',
+    'I work by making the workflow explicit, choosing clear system boundaries and keeping implementation practical for the team that will run and extend it.',
   ],
   distinctive: [
-    'Backend engineering with product understanding',
-    'System planning and hands-on development',
-    'Deployment and infrastructure experience',
-    'Independent work and team leadership',
-    'Software built for real business use',
+    'Product decisions informed by technical constraints',
+    'Connected workflows, data and system boundaries',
+    'Deployment, observability and operational reliability',
+    'Technical direction with hands-on delivery',
   ],
   motto: 'Understand the problem. Design clearly. Build carefully. Release. Learn. Improve.',
 };
 
 export const whyMe = {
-  eyebrow: 'Why Me',
-  heading: 'AI accelerates the work. Thinking directs it.',
-  intro:
-    'Technology changes quickly, but the fundamentals remain the same: understand the problem, think critically and design the right solution.',
-  paragraphs: [
-    'I use AI for research, exploration, productivity and repetitive work. I do not treat generated output as the final answer—I question it, validate it and adapt it to the real problem.',
-    'My process starts before the code. I study the workflow, find the friction, visualize how the system should behave and plan how each part should work together.',
-    'This approach guides everything I build, from enterprise ERP and HR automation to GIS infrastructure and real-estate platforms.',
-  ],
-  statement: {
-    lead: 'AI helps me move faster.',
-    close: 'Thinking helps me move in the right direction.',
-  },
-  attributes: [
-    { key: 'problem', title: 'Problem Solver', description: 'I focus on understanding the real problem before choosing an implementation.' },
-    { key: 'system', title: 'System Thinker', description: 'I design complete workflows and architecture, not isolated features.' },
-    { key: 'ai', title: 'AI-Enabled Engineer', description: 'I use modern tools to increase speed without giving up judgment or quality.' },
-    { key: 'user', title: 'User-Focused Builder', description: 'I measure a solution by how useful it is to the people who depend on it.' },
-  ],
+  eyebrow: 'AI in the workflow',
+  heading: 'AI accelerates the work. Engineering judgment directs it.',
+  intro: 'I use AI for research, exploration and repetitive work. Architecture, validation and product decisions remain engineering responsibilities.',
 };
 
 export const capabilities = [
@@ -101,9 +84,9 @@ export const projects = [
     fullTitle: 'Enterprise Real Estate Operations & Sales ERP',
     category: 'Real-estate operations',
     summary:
-      'One business management system for real-estate projects, land records, sales leads, buyers, payments, expenses, brokers and partners.',
+      'Replaces disconnected project, sales and finance records with one operating workflow—from campaign lead assignment through buyer payments, expenses and partner tracking.',
     description:
-      'An ERP—a central business management system—built for a real-estate and land-development company. It brings project records, sales, finance, brokers and site operations into one connected platform.',
+      'A real-estate and land-development company needed project records, lead handling, buyer payments, expenses and partner activity to follow one traceable process. The ERP connects those workflows in a modular backend, giving operations and sales teams a shared source of truth from lead intake through financial tracking.',
     tags: ['Node.js', 'MongoDB', 'ERP', 'Automation'],
     allTags: ['Node.js', 'Express.js', 'MongoDB', 'REST APIs', 'Automation', 'ERP Architecture'],
     usp: {
@@ -129,9 +112,9 @@ export const projects = [
     fullTitle: 'Automated HR, Attendance & Payroll Management',
     category: 'Workforce automation',
     summary:
-      'An HR management system connecting attendance, shifts, leave and payroll, with reusable company rules and automatic employee documents.',
+      'Turns recurring HR administration into a rules-driven workflow connecting shifts, attendance, leave, payroll inputs and employee documents.',
     description:
-      'An HRMS—Human Resource Management System—where HR teams set company rules once, and the platform uses them to manage everyday employee tasks with less manual work.',
+      'HR teams were repeatedly applying the same shift, leave and payroll rules across employee records. The HRMS stores those policies as reusable configuration, connects daily attendance and approval workflows, and turns the resulting data into payroll inputs and generated documents.',
     tags: ['HRMS', 'Payroll', 'Attendance', 'Automation'],
     allTags: ['HR Automation', 'Attendance', 'Payroll', 'Workflow Engine', 'Document Generation', 'REST APIs'],
     usp: {
@@ -157,9 +140,9 @@ export const projects = [
     fullTitle: 'Self-Service GIS Tile Infrastructure',
     category: 'Mapping infrastructure',
     summary:
-      'A self-service tool that turns uploaded MBTiles map files into URLs that MapLibre and other mapping applications can use.',
+      'Removes the GIS publishing bottleneck by turning uploaded MBTiles datasets into reusable tile endpoints ready for MapLibre applications.',
     description:
-      'A GIS mapping platform that makes it easier to publish custom map layouts and use them inside web applications.',
+      'Publishing prepared geographic data into a web product required specialist infrastructure and repeated setup. This service validates uploaded MBTiles, exposes the dataset through reusable tile endpoints and gives application teams a direct path from map file to a working MapLibre layer.',
     tags: ['GIS', 'MBTiles', 'MapLibre', 'Tile Server'],
     allTags: ['GIS', 'MBTiles', 'MapLibre', 'Tile Serving', 'Node.js', 'Mapping Infrastructure'],
     usp: {
@@ -185,9 +168,9 @@ export const projects = [
     fullTitle: 'GIS-Powered Real Estate & Construction Visualization',
     category: 'Map-based insights',
     summary:
-      'An interactive map platform that combines project layouts, real-world location and construction progress in one clear view.',
+      'Connects project layouts, real locations and construction progress in one interactive view, replacing the ambiguity of separate static plans.',
     description:
-      'A map-based platform that helps clients, sales teams and project stakeholders understand land, layouts and construction information visually.',
+      'Project layouts, location context and construction updates were difficult to understand across separate static documents. The platform positions layouts on real maps, connects areas to operational data and gives clients, sales teams and project stakeholders one interactive view of place and progress.',
     tags: ['GIS', 'Real Estate', 'Construction', 'Visualization'],
     allTags: ['GIS', 'MapLibre', 'MBTiles', 'Real Estate', 'Construction', 'ERP Visualization'],
     usp: {
@@ -224,19 +207,18 @@ export const engineeringPhilosophy = {
 };
 
 export const stack = [
-  { group: 'Backend', items: ['Node.js', 'Express.js', 'JavaScript', 'REST APIs'] },
+  { group: 'Backend', items: ['Node.js', 'Express.js', 'JavaScript', 'REST APIs', 'Socket.IO'] },
   { group: 'Data', items: ['MongoDB', 'Mongoose', 'Redis'] },
-  { group: 'Real-Time', items: ['Socket.IO'] },
-  { group: 'Infrastructure', items: ['Docker', 'Nginx', 'PM2', 'VPS', 'Cloudflare'] },
-  { group: 'Cloud & Storage', items: ['AWS S3'] },
+  { group: 'Infrastructure', items: ['Docker', 'Nginx', 'PM2', 'VPS', 'Cloudflare', 'AWS S3'] },
   { group: 'Geospatial', items: ['MapTiler', 'MBTiles', 'GIS applications'] },
   { group: 'Development', items: ['Git / GitHub', 'Postman'] },
-  { group: 'Frontend Awareness', items: ['React', 'MERN ecosystem'] },
+  { group: 'Product Integration', items: ['React', 'MERN ecosystem'] },
 ];
 
 export const experience = {
   eyebrow: 'Experience',
-  role: 'Founding Engineer, Backend Engineer & Team Lead',
+  role: 'Backend Engineer & Team Lead',
+  badge: 'Founding Engineer',
   company: 'Build India Technolab',
   period: 'TODO: confirm dates', // TODO: confirm exact tenure
   summary:
@@ -244,18 +226,15 @@ export const experience = {
 };
 
 export const leadership = {
-  eyebrow: 'Ownership',
-  heading: 'From implementation to ownership',
-  intro:
-    'My responsibility goes beyond writing backend code. I help shape the architecture, deployment setup, technical decisions and team workflow. I care about both reliable software and a clear way of building it.',
   items: [
-    'Planning backend systems and APIs',
-    'Designing databases around business workflows',
-    'Defining project structure and coding standards',
-    'Setting up servers and production deployments',
-    'Reviewing code and making technical decisions',
-    'Coordinating work and supporting engineers',
-    'Turning business needs into clear technical tasks',
+    'Backend planning and API design',
+    'Database design around business workflows',
+    'Project structure and coding standards',
+    'Production deployment and infrastructure',
+    'Code review and quality direction',
+    'Architecture and technical decisions',
+    'Team coordination and engineer support',
+    'Requirements translated into delivery plans',
   ],
 };
 
@@ -282,7 +261,7 @@ export const services = [
   },
   {
     id: 'deployment-infra',
-    title: 'Deployment & Infra',
+    title: 'Deployment & Infrastructure',
     description: 'Preparing servers, deployment processes, storage and production environments for reliable releases.',
   },
   {

@@ -415,7 +415,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="work" className="featured-work relative overflow-hidden border-t border-ink-600 py-24 md:py-32">
+    <section id="work" className="featured-work relative overflow-hidden border-t border-ink-600 py-20 md:py-28">
       <div className="bp-grid absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_80%_70%_at_50%_40%,black,transparent)]" />
       <div className="absolute left-1/2 top-12 h-80 w-[70%] -translate-x-1/2 rounded-full bg-signal/[0.035] blur-[100px]" />
       <div className="relative mx-auto max-w-content px-6 md:px-10">
@@ -449,7 +449,7 @@ export default function Projects() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-5 md:grid-cols-2">
+        <div className="mt-12 grid gap-5 md:grid-cols-2">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} onOpen={openProject} />
           ))}

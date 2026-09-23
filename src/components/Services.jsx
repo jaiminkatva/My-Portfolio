@@ -7,14 +7,14 @@ const serviceIcons = ['backend', 'architecture', 'platforms', 'gis', 'infra', 'l
 
 export default function Services() {
   return (
-    <section className="section-shell relative overflow-hidden border-t border-white/[0.06] py-24 md:py-36">
+    <section className="section-shell relative overflow-hidden border-t border-white/[0.06] py-20 md:py-28">
       <div className="relative mx-auto max-w-content px-6 md:px-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_340px] lg:items-end">
-          <SectionHeading eyebrow="How I Can Help" heading="Practical engineering for real problems." />
-          <p className="text-base leading-[1.8] text-paper-dim">Whether you need a new backend, a clearer business workflow or a more reliable existing system, we can start with the problem and build the right solution.</p>
+          <SectionHeading eyebrow="Engineering Capabilities" heading="Focused expertise across the system lifecycle." />
+          <p className="text-base leading-[1.75] text-paper-dim">Capabilities shaped by owning backend products from system planning and implementation through integration, infrastructure and team delivery.</p>
         </div>
 
-        <div className="mt-16 border-t border-white/[0.09]">
+        <div className="mt-12 border-t border-white/[0.09]">
           {services.map((service, index) => (
             <motion.article key={service.id} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.55, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }} className="service-row group relative isolate grid gap-4 border-b border-white/[0.08] py-7 md:grid-cols-[70px_1fr_1.25fr_48px] md:items-center md:gap-7">
               <span className="font-mono text-sm text-paper-faint">0{index + 1}</span>

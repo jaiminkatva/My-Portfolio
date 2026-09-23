@@ -1,6 +1,6 @@
 # Jaimin Katva — Portfolio
 
-A premium, futuristic React portfolio for Jaimin Katva (Backend Engineer · Team Lead · Product Builder),
+A premium, futuristic React portfolio for Jaimin Katva (Backend Engineer · Team Lead),
 built with React, Vite, Tailwind CSS, Framer Motion and Lenis smooth scrolling.
 
 ## Design direction

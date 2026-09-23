@@ -2,8 +2,6 @@ import { motion } from 'framer-motion';
 import {
   TbBinaryTree,
   TbBriefcase,
-  TbCode,
-  TbDatabase,
   TbRocket,
   TbTopologyStar3,
   TbUsers,
@@ -11,10 +9,10 @@ import {
 import { about } from '../data/content';
 import SectionHeading from './shared/SectionHeading';
 
-const storyIcons = [TbBriefcase, TbCode, TbDatabase, TbTopologyStar3];
-const storyLabels = ['Role & responsibility', 'Technical toolkit', 'Real-world experience', 'Working philosophy'];
-const strengthIcons = [TbCode, TbBinaryTree, TbRocket, TbUsers, TbBriefcase];
-const strengthTitles = ['Product-aware', 'Plan & build', 'Production-ready', 'Lead & deliver', 'Business-focused'];
+const storyIcons = [TbBriefcase, TbBinaryTree, TbTopologyStar3];
+const storyLabels = ['Role & Responsibility', 'Real-World Experience', 'Working Philosophy'];
+const strengthIcons = [TbBriefcase, TbBinaryTree, TbRocket, TbUsers];
+const strengthTitles = ['Product-aware', 'System thinking', 'Production-ready', 'Technical leadership'];
 
 const reveal = {
   hidden: { opacity: 0, y: 18 },
@@ -33,7 +31,7 @@ function ProfileCard() {
       <div className="relative flex items-center justify-between gap-4">
         <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">Engineer profile</span>
         <span className="inline-flex items-center gap-2 rounded-full border border-system/20 bg-system/[0.055] px-3 py-1.5 font-mono text-xs text-system">
-          <span className="h-1.5 w-1.5 rounded-full bg-system shadow-[0_0_9px_rgba(94,200,216,0.7)]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-system" />
           Building systems
         </span>
       </div>
@@ -80,7 +78,7 @@ function StoryPanel() {
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">How I work</span>
           <h3 className="mt-3 font-display text-2xl font-medium text-paper sm:text-3xl">The work behind the title.</h3>
         </div>
-        <span className="hidden font-mono text-xs text-paper-faint sm:block">01 — 04</span>
+        <span className="hidden font-mono text-xs text-paper-faint sm:block">01 — 03</span>
       </div>
 
       <div className="relative mt-2">
@@ -117,7 +115,7 @@ function StoryPanel() {
 
 export default function About() {
   return (
-    <section id="about" className="section-shell relative overflow-hidden border-t border-white/[0.06] py-24 md:py-36">
+    <section id="about" className="section-shell relative overflow-hidden border-t border-white/[0.06] py-20 md:py-28">
       <div className="bp-grid pointer-events-none absolute inset-0 opacity-[0.13] [mask-image:radial-gradient(ellipse_68%_60%_at_20%_45%,black,transparent)]" />
 
       <div className="relative mx-auto max-w-content px-6 md:px-10">
@@ -129,7 +127,7 @@ export default function About() {
           </motion.div>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-70px' }} transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }} className="about-board mt-14 overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-ink-800/70">
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-70px' }} transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }} className="about-board mt-11 overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-ink-800/70">
           <div className="flex min-h-14 items-center justify-between border-b border-white/[0.08] bg-ink-900/45 px-5 sm:px-7">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">About Jaimin</span>
@@ -147,7 +145,7 @@ export default function About() {
           </div>
         </motion.div>
 
-        <div className="about-strengths mt-5 grid overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-800/55 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="about-strengths mt-5 grid overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-800/55 sm:grid-cols-2 lg:grid-cols-4">
           {about.distinctive.map((line, index) => {
             const Icon = strengthIcons[index];
             return (

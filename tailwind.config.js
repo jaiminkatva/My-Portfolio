@@ -14,8 +14,8 @@ export default {
         },
         paper: {
           DEFAULT: '#E8EAED',
-          dim: '#AAB2C0',
-          faint: '#6B7484',
+          dim: '#B7BFCA',
+          faint: '#7B8594',
         },
         signal: {
           DEFAULT: '#FF8A3D',

@@ -41,7 +41,7 @@ export default function EngineeringApproach() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="approach" className="approach-section section-shell relative overflow-hidden border-t border-white/[0.06] py-24 md:py-36">
+    <section id="approach" className="approach-section section-shell relative overflow-hidden border-t border-white/[0.06] py-20 md:py-28">
       <div className="bp-grid absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_75%_75%_at_50%_55%,black,transparent)]" />
       <div className="section-orb -right-40 top-20 bg-signal" />
       <div className="absolute -left-48 bottom-10 h-96 w-96 rounded-full bg-system/[0.035] blur-[110px]" />
@@ -52,7 +52,7 @@ export default function EngineeringApproach() {
           <p className="text-base leading-[1.8] text-paper-dim">{engineeringPhilosophy.intro}</p>
         </div>
 
-        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-70px' }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="approach-board relative mt-16 overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-ink-800/70 backdrop-blur-sm">
+        <motion.div initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-70px' }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="approach-board relative mt-12 overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-ink-800/70 backdrop-blur-sm">
           <div className="approach-board-grid pointer-events-none absolute inset-0" />
           <div className="relative flex min-h-14 items-center justify-between border-b border-white/[0.08] bg-ink-900/35 px-5 sm:px-7">
             <div className="flex items-center gap-3">
@@ -65,7 +65,6 @@ export default function EngineeringApproach() {
 
           <div className="relative grid lg:grid-cols-[280px_1fr]">
             <aside className="relative overflow-hidden border-b border-white/[0.08] p-7 lg:border-b-0 lg:border-r lg:p-8">
-              <div className="absolute -left-20 top-16 h-52 w-52 rounded-full bg-signal/[0.07] blur-[65px]" />
               <div className="relative">
                 <span className="grid h-14 w-14 place-items-center rounded-2xl border border-signal/20 bg-signal/[0.07] font-display text-2xl text-signal">{'{ }'}</span>
                 <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">Operating principle</p>
@@ -95,7 +94,6 @@ export default function EngineeringApproach() {
                       whileHover={reduceMotion ? undefined : { y: -5 }}
                       className={`approach-step group relative z-10 min-h-[165px] overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-800/95 p-5 ${positions[index]}`}
                     >
-                      <div className="approach-step-glow absolute -right-12 -top-14 h-32 w-32 rounded-full bg-signal/[0.07] blur-[42px] transition-opacity duration-500 group-hover:opacity-100" />
                       <div className="relative flex items-start justify-between">
                         <span className="approach-icon grid h-11 w-11 place-items-center rounded-xl border border-signal/20 bg-signal/[0.06] text-signal"><Icon className="h-5 w-5" /></span>
                         <span className="font-mono text-xs tracking-[0.16em] text-paper-faint">0{index + 1}</span>
