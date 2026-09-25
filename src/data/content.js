@@ -24,7 +24,7 @@ export const hero = {
 export const about = {
   eyebrow: 'About',
   paragraphs: [
-    "I'm Jaimin Katva, a Backend Engineer · Team Lead responsible for planning systems, building core services and guiding delivery from requirements to production.",
+    "I'm Jaimin Katva, a Backend Engineer and Team Lead responsible for planning systems, building core services and guiding delivery from requirements to production.",
     'My experience comes from operational software: connecting sales and land records, automating HR workflows, serving map data and turning fragmented processes into usable products.',
     'I work by making the workflow explicit, choosing clear system boundaries and keeping implementation practical for the team that will run and extend it.',
   ],
@@ -42,39 +42,6 @@ export const whyMe = {
   heading: 'AI accelerates the work. Engineering judgment directs it.',
   intro: 'I use AI for research, exploration and repetitive work. Architecture, validation and product decisions remain engineering responsibilities.',
 };
-
-export const capabilities = [
-  {
-    id: 'backend',
-    title: 'Backend Systems',
-    description: 'APIs, login and permissions, business rules and services that safely connect users, data and product features.',
-  },
-  {
-    id: 'platforms',
-    title: 'Business Platforms',
-    description: 'CRM and internal tools that help teams manage customers, projects, records and daily operations in one place.',
-  },
-  {
-    id: 'gis',
-    title: 'GIS Applications',
-    description: 'Interactive maps that show project locations, land layouts, construction data and other location-based information.',
-  },
-  {
-    id: 'realtime',
-    title: 'Real-Time Features',
-    description: 'Live notifications, online status and instant updates using Socket.IO and Redis-based communication.',
-  },
-  {
-    id: 'infra',
-    title: 'Infrastructure',
-    description: 'The servers and tools that keep software running reliably, including Docker, Nginx, PM2, Cloudflare and storage.',
-  },
-  {
-    id: 'architecture',
-    title: 'Technical Architecture',
-    description: 'Planning how APIs, databases and application modules work together so the product stays clear and maintainable.',
-  },
-];
 
 export const projects = [
   {
@@ -210,7 +177,7 @@ export const stack = [
   { group: 'Backend', items: ['Node.js', 'Express.js', 'JavaScript', 'REST APIs', 'Socket.IO', 'Git / GitHub', 'Postman'] },
   { group: 'Data', items: ['MongoDB', 'Mongoose', 'Redis', 'SQL', 'PostgreSQL'] },
   { group: 'Infrastructure', items: ['Docker', 'Nginx', 'PM2', 'VPS', 'Cloudflare', 'AWS S3'] },
-  { group: 'Geospatial', items: ['MapTiler', 'MBTiles', 'GIS applications'] },
+  { group: 'Geospatial', items: ['MapLibre', 'MapTiler', 'MBTiles', 'GIS applications'] },
   { group: 'Product', items: ['React', 'MERN ecosystem'] },
 ];
 
@@ -274,5 +241,5 @@ export const contact = {
   eyebrow: 'Contact',
   heading: 'Have a system to build?',
   body: 'If you are planning a product, improving an existing system or trying to simplify a difficult business process, I would be happy to understand the problem and explore a practical solution.',
-  ctaLabel: "Let's discuss your project.",
+  ctaLabel: "Let's discuss your project",
 };

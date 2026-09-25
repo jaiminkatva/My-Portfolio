@@ -12,6 +12,7 @@ import {
   SiNginx,
   SiNodedotjs,
   SiPm2,
+  SiPostgresql,
   SiPostman,
   SiQgis,
   SiReact,
@@ -34,18 +35,21 @@ import {
   TbRoute,
   TbServer,
   TbSettingsAutomation,
+  TbSql,
   TbTopologyFull,
 } from 'react-icons/tb';
 
 const marks = {
   'Node.js': [SiNodedotjs, '#5FA04E'],
-  'Express.js': [SiExpress, '#E8EAED'],
+  'Express.js': [SiExpress, 'rgb(var(--color-paper))'],
   JavaScript: [SiJavascript, '#F7DF1E'],
   'REST APIs': [TbApi, '#FF8A3D'],
   MongoDB: [SiMongodb, '#47A248'],
   Mongoose: [SiMongoose, '#B85C5C'],
+  SQL: [TbSql, '#7DA6FF'],
+  PostgreSQL: [SiPostgresql, '#699ECA'],
   Redis: [SiRedis, '#FF4438'],
-  'Socket.IO': [SiSocketdotio, '#E8EAED'],
+  'Socket.IO': [SiSocketdotio, 'rgb(var(--color-paper))'],
   Docker: [SiDocker, '#2496ED'],
   Nginx: [SiNginx, '#009639'],
   PM2: [SiPm2, '#A88BFA'],
@@ -76,9 +80,9 @@ const marks = {
 export default function TechnologyMark({ name, className = 'h-[18px] w-[18px]' }) {
   if (name === 'Git / GitHub') {
     return (
-      <span className="flex items-center gap-1" aria-hidden="true">
-        <SiGit className="h-4 w-4 text-[#F05032]" />
-        <SiGithub className="h-4 w-4 text-paper" />
+      <span className="relative inline-flex" aria-hidden="true">
+        <SiGit className={className} style={{ color: '#F05032' }} />
+        <SiGithub className="absolute -bottom-1 -right-1 h-2.5 w-2.5 rounded-full bg-ink-800 text-paper" />
       </span>
     );
   }

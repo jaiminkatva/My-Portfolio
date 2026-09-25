@@ -28,7 +28,7 @@ export default function MagneticButton({ href, children, variant = 'primary', cl
   const styles =
     variant === 'primary'
       ? 'magnetic-button-primary text-ink-900'
-      : 'magnetic-button-secondary border border-white/[0.12] bg-white/[0.025] text-paper hover:border-signal/35 hover:text-signal';
+      : 'magnetic-button-secondary border border-line/[0.12] bg-line/[0.025] text-paper hover:border-signal/35 hover:text-signal';
 
   return (
     <motion.a

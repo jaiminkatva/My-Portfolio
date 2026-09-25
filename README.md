@@ -1,78 +1,73 @@
 # Jaimin Katva — Portfolio
 
-A premium, futuristic React portfolio for Jaimin Katva (Backend Engineer · Team Lead),
-built with React, Vite, Tailwind CSS, Framer Motion and Lenis smooth scrolling.
+Personal portfolio for Jaimin Katva (Backend Engineer · Team Lead), built with React, Vite, Tailwind CSS,
+Framer Motion and Lenis smooth scrolling. Live at <https://jaiminkatva.github.io/portfolio/>.
 
 ## Design direction
 
-- **Aesthetic:** engineering-schematic / blueprint — deep ink-navy background, a single amber "signal" accent
-  (used the way a status indicator light is used: sparingly, to mark what matters), a hairline blueprint grid,
-  and an animated system-architecture diagram in the hero as the one bold, memorable visual.
-- **Type:** Space Grotesk for display/headings, IBM Plex Sans for body copy, IBM Plex Mono for
-  labels, coordinates and data.
-- **Motion:** one orchestrated hero load sequence, scroll-triggered reveals (once per element, not looping),
-  a magnetic CTA button, a lightweight custom cursor, and a continuously animated data-flow diagram. Reduced
-  motion preferences are respected throughout (see `useLenis` and `CursorDot`).
+- **Aesthetic:** engineering-schematic / blueprint — ink surfaces, a single amber "signal" accent, a cyan
+  "system" accent, hairline blueprint grids and connected-system diagrams.
+- **Themes:** dark and light. The initial theme follows the visitor's OS setting; the nav toggle stores an
+  explicit choice in `localStorage`. All colours come from CSS variables in `src/index.css` and are exposed to
+  Tailwind in `tailwind.config.js` (`ink`, `paper`, `signal`, `system`, `line`). Use `line/[alpha]` for
+  hairlines and translucent tints — it is white on dark and slate on light, so borders and hover states work in
+  both themes without overrides.
+- **Type:** Space Grotesk (display), IBM Plex Sans (body), IBM Plex Mono (labels and data).
+- **Motion:** hero load sequence, scroll-triggered reveals, animated data-flow connectors, magnetic CTAs and a
+  pointer-only cursor ring. `prefers-reduced-motion` disables smooth scrolling, the cursor, transforms and
+  looping animations.
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev
+npm run dev       # http://localhost:5173/portfolio/
+npm run lint
+npm run build     # outputs to dist/
+npm run preview   # serves the production build
 ```
 
-Build for production:
-
-```bash
-npm run build
-npm run preview
-```
+The site is served from the `/portfolio/` sub-path (see `base` in `vite.config.js`). Deploy the contents of
+`dist/` after every build.
 
 ## Project structure
 
 ```
+public/
+  logo-mark.png            # Optimised logo used in the UI (jklogo.png is the full-size source)
+  favicon-32.png, icon-192.png, icon-512.png, apple-touch-icon.png
+  og-image.png             # 1200×630 social preview card
+  site.webmanifest, robots.txt, sitemap.xml
 src/
-  data/content.js         # All site copy in one place — edit this file for text changes
-  hooks/useLenis.js        # Smooth-scroll setup
+  data/content.js          # All site copy — edit this file for text changes
+  hooks/useLenis.js        # Smooth scroll + in-page anchor handling; getLenis() for pausing it
+  hooks/useTheme.js        # Light/dark theme state
   components/
-    shared/                # SectionHeading, MagneticButton, CursorDot — reused across sections
-    Nav.jsx
-    Hero.jsx
-    SystemDiagram.jsx      # Animated SVG architecture diagram used in the hero
+    shared/                # SectionHeading, MagneticButton, CursorDot, SystemIcon, TechnologyMark
+    Nav.jsx                # Fixed nav, active-section highlight, mobile menu (< 1024px)
+    Hero.jsx, SystemDiagram.jsx
     About.jsx
-    WhatIBuild.jsx
-    Projects.jsx
-    EngineeringApproach.jsx
-    TechStack.jsx
+    Projects.jsx           # Project cards + accessible detail modal (overview / case study, prev / next)
     Experience.jsx
-    Leadership.jsx
-    Services.jsx
-    Contact.jsx
-    Footer.jsx
-  App.jsx
-  main.jsx
-  index.css
+    EngineeringApproach.jsx
+    WhyMe.jsx              # "AI in the workflow" note
+    TechStack.jsx
+    Services.jsx           # Each capability opens a pre-filled enquiry email
+    Contact.jsx, Footer.jsx
+  App.jsx, main.jsx, index.css
 ```
 
 ## Before you publish — content to confirm
 
-This site was built strictly from the approved content brief. A few fields are intentionally left as
-`TODO` rather than invented, per the brief's own case-study rule ("never manufacture performance numbers
-or outcomes"). Search `src/data/content.js` for `TODO` and fill in:
+A few fields are intentionally left as `TODO` rather than invented. Search `src/data/content.js` for `TODO`:
 
-- [ ] Public email address and GitHub URL (`identity`)
-- [ ] Exact job title / employment dates (`experience.period`)
-- [ ] Confirm which project details/screenshots are cleared for public disclosure
-
-## Notes on the architecture diagram
-
-`SystemDiagram.jsx` renders a representative request/data flow (client → API → services → data → infra),
-not a diagram of any specific client's proprietary architecture. Swap the `nodes`/`edges` arrays if you'd
-like it to reflect a particular project instead.
+- [ ] Employment dates (`experience.period`) — hidden on the page until filled in
+- [ ] Confirm which project details are cleared for public disclosure
 
 ## Extending
 
-- To add a project, add an entry to the `projects` array in `src/data/content.js`. Cards render automatically.
-- To add a project, include its project brief and `caseStudy` fields; both modal views render from the same entry.
-- Tailwind tokens (colors, fonts) live in `tailwind.config.js` — the palette is intentionally narrow (ink,
-  paper, signal, system) to keep the site restrained.
+- To add a project, add an entry to `projects` in `src/data/content.js` (including its `caseStudy` fields) and
+  a matching accent in `Projects.jsx`. Cards, the modal and prev/next navigation pick it up automatically.
+- To add a technology icon, map its name in `src/components/shared/TechnologyMark.jsx`.
+- If the site URL changes, update the canonical, Open Graph and JSON-LD URLs in `index.html`, plus
+  `public/robots.txt` and `public/sitemap.xml`.

@@ -1,10 +1,11 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
+// Nodes sit on the ends of the diagonal links (SVG units are 0–500).
 const technologies = [
-  { id: 'node', label: 'Node.js', detail: 'Runtime', x: '7%', y: '14%' },
-  { id: 'mongo', label: 'MongoDB', detail: 'Database', x: '68%', y: '8%' },
-  { id: 'redis', label: 'Redis', detail: 'Cache', x: '73%', y: '65%' },
-  { id: 'docker', label: 'Docker', detail: 'Deploy', x: '4%', y: '69%' },
+  { id: 'node', label: 'Node.js', detail: 'Runtime', cx: 110, cy: 110 },
+  { id: 'mongo', label: 'MongoDB', detail: 'Database', cx: 390, cy: 110 },
+  { id: 'redis', label: 'Redis', detail: 'Cache', cx: 390, cy: 390 },
+  { id: 'docker', label: 'Docker', detail: 'Deploy', cx: 110, cy: 390 },
 ];
 
 const nodeVariants = {
@@ -31,8 +32,8 @@ function TechIcon({ id }) {
 
 function TechMark({ id }) {
   return (
-    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.04] text-signal shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-      <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-line/10 bg-line/[0.04] text-signal shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:h-8 sm:w-8">
+      <svg viewBox="0 0 20 20" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <TechIcon id={id} />
       </svg>
     </span>
@@ -43,61 +44,60 @@ export default function SystemDiagram() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="system-visual relative mx-auto aspect-square w-full max-w-[500px]" aria-label="Animated backend technology system">
-      <div className="absolute inset-[5%] rounded-full border border-white/[0.07]" />
-      <div className="absolute inset-[18%] rounded-full border border-dashed border-white/[0.09] system-orbit" />
+    <div
+      className="system-visual relative mx-auto aspect-square w-full max-w-[500px]"
+      role="img"
+      aria-label="Diagram of a backend system core connected to Node.js, MongoDB, Redis and Docker"
+    >
+      <div className="absolute inset-[5%] rounded-full border border-line/[0.07]" />
+      <div className="absolute inset-[18%] rounded-full border border-dashed border-line/[0.09] system-orbit" />
       <div className="absolute inset-[31%] rounded-full border border-signal/20 system-orbit-reverse" />
 
       <svg className="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 500 500" aria-hidden="true">
         <defs>
-          <linearGradient id="system-line" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#FF8A3D" stopOpacity="0" />
-            <stop offset="0.5" stopColor="#FF8A3D" stopOpacity="0.8" />
-            <stop offset="1" stopColor="#5EC8D8" stopOpacity="0" />
-          </linearGradient>
           <radialGradient id="core-glow">
             <stop offset="0" stopColor="#FF8A3D" stopOpacity="0.2" />
             <stop offset="1" stopColor="#FF8A3D" stopOpacity="0" />
           </radialGradient>
         </defs>
         <circle cx="250" cy="250" r="150" fill="url(#core-glow)" opacity="0.7" />
-        {[45, 135, 225, 315].map((angle, index) => {
-          const radians = (angle * Math.PI) / 180;
-          const x = 250 + Math.cos(radians) * 184;
-          const y = 250 + Math.sin(radians) * 184;
-          return (
-            <motion.line
-              key={angle}
-              x1="250"
-              y1="250"
-              x2={x}
-              y2={y}
-              stroke="url(#system-line)"
-              strokeWidth="1"
-              strokeDasharray="4 8"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 0.8 }}
-              transition={{ duration: 1.2, delay: 0.4 + index * 0.1 }}
-            />
-          );
-        })}
-        {!reduceMotion && (
-          <circle r="3" fill="#FF8A3D" className="system-packet">
-            <animateMotion dur="3s" repeatCount="indefinite" path="M250,250 L378,122" />
-          </circle>
-        )}
+        {technologies.map((tech, index) => (
+          <motion.line
+            key={tech.id}
+            x1="250"
+            y1="250"
+            x2={tech.cx}
+            y2={tech.cy}
+            className="stroke-signal"
+            strokeOpacity="0.55"
+            strokeWidth="1"
+            strokeDasharray="4 8"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.4 + index * 0.1 }}
+          />
+        ))}
+        {!reduceMotion &&
+          technologies.map((tech, index) => (
+            <circle key={tech.id} r="3" className="system-packet fill-signal" opacity="0">
+              <animateMotion dur="2.4s" begin={`${1.6 + index * 0.6}s`} repeatCount="indefinite" path={`M250,250 L${tech.cx},${tech.cy}`} />
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="2.4s" begin={`${1.6 + index * 0.6}s`} repeatCount="indefinite" />
+            </circle>
+          ))}
       </svg>
 
+      {/* Framer owns this element's transform, so centering goes through x/y rather than Tailwind translate classes. */}
       <motion.div
         initial={{ opacity: 0, scale: 0.72, rotate: -8 }}
         animate={{ opacity: 1, scale: 1, rotate: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute left-1/2 top-1/2 z-10 flex h-40 w-40 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-[2rem] border border-signal/30 bg-ink-800/90 shadow-[0_0_80px_rgba(255,138,61,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl"
+        style={{ x: '-50%', y: '-50%' }}
+        className="system-core-card absolute left-1/2 top-1/2 z-10 flex h-32 w-32 flex-col items-center justify-center rounded-[1.75rem] border border-signal/30 bg-ink-800/90 shadow-[0_0_80px_rgba(255,138,61,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl sm:h-40 sm:w-40 sm:rounded-[2rem]"
       >
         <span className="absolute left-4 top-4 h-1.5 w-1.5 rounded-full bg-signal shadow-[0_0_12px_#FF8A3D]" />
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">System core</span>
-        <span className="mt-2 font-display text-4xl font-medium text-paper">{'{ }'}</span>
-        <span className="mt-2 flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-system">
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-paper-faint sm:text-xs">System core</span>
+        <span className="mt-1.5 font-display text-3xl font-medium text-paper sm:mt-2 sm:text-4xl">{'{ }'}</span>
+        <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wide text-system sm:mt-2 sm:text-xs">
           <span className="h-1 w-1 rounded-full bg-system shadow-[0_0_8px_#5EC8D8]" />
           production ready
         </span>
@@ -110,18 +110,18 @@ export default function SystemDiagram() {
           variants={nodeVariants}
           initial="hidden"
           animate="show"
-          style={{ left: tech.x, top: tech.y }}
-          className="absolute z-20 flex items-center gap-2.5 rounded-xl border border-white/[0.09] bg-ink-800/85 p-2.5 pr-4 shadow-[0_14px_45px_rgba(0,0,0,0.3)] backdrop-blur-xl"
+          style={{ left: `${tech.cx / 5}%`, top: `${tech.cy / 5}%`, x: '-50%', y: '-50%' }}
+          className="system-tech-card absolute z-20 flex items-center gap-2 whitespace-nowrap rounded-xl border border-line/[0.09] bg-ink-800/85 p-2 pr-3 shadow-[0_14px_45px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:gap-2.5 sm:p-2.5 sm:pr-4"
         >
           <TechMark id={tech.id} />
           <span>
-            <span className="block font-display text-sm font-medium text-paper">{tech.label}</span>
-            <span className="block font-mono text-xs uppercase tracking-wide text-paper-faint">{tech.detail}</span>
+            <span className="block font-display text-[13px] font-medium text-paper sm:text-sm">{tech.label}</span>
+            <span className="block font-mono text-[10px] uppercase tracking-wide text-paper-faint sm:text-xs">{tech.detail}</span>
           </span>
         </motion.div>
       ))}
 
-      <div className="absolute bottom-[3%] left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-system/20 bg-system/[0.06] px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] text-system">
+      <div className="absolute bottom-[2%] left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-system/20 bg-system/[0.06] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-system backdrop-blur-sm sm:px-4 sm:py-2 sm:text-xs">
         <span className="relative flex h-1.5 w-1.5">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-system opacity-60" />
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-system" />

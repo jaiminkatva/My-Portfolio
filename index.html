@@ -2,23 +2,69 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="%BASE_URL%jklogo.png" />
-    <link rel="apple-touch-icon" href="%BASE_URL%jklogo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Jaimin Katva — Backend Engineer · Team Lead</title>
     <meta
       name="description"
       content="Jaimin Katva builds the backend systems behind real-world digital products — APIs, data architecture, infrastructure and technical leadership."
     />
-    <meta name="theme-color" content="#0B0E14" />
+    <meta name="author" content="Jaimin Katva" />
+    <link rel="canonical" href="https://jaiminkatva.github.io/portfolio/" />
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Jaimin Katva — Backend Engineer · Team Lead" />
-    <meta
-      property="og:description"
-      content="I build the systems behind real-world digital products."
-    />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%icon-192.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
+
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0B0E14" />
+    <script>
+      (() => {
+        const storageKey = 'theme';
+        let theme;
+        try {
+          theme = localStorage.getItem(storageKey);
+        } catch (_) {
+          theme = null;
+        }
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#F6F7F9' : '#0B0E14';
+      })();
+    </script>
+
+    <!-- Open Graph / social previews -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Jaimin Katva" />
+    <meta property="og:title" content="Jaimin Katva — Backend Engineer · Team Lead" />
+    <meta property="og:description" content="I build reliable systems that power products — from APIs and databases to deployment and production." />
+    <meta property="og:url" content="https://jaiminkatva.github.io/portfolio/" />
+    <meta property="og:image" content="https://jaiminkatva.github.io/portfolio/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Jaimin Katva — I build reliable systems that power products." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Jaimin Katva — Backend Engineer · Team Lead" />
+    <meta name="twitter:description" content="I build reliable systems that power products — from APIs and databases to deployment and production." />
+    <meta name="twitter:image" content="https://jaiminkatva.github.io/portfolio/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jaimin Katva",
+        "jobTitle": "Backend Engineer & Team Lead",
+        "url": "https://jaiminkatva.github.io/portfolio/",
+        "image": "https://jaiminkatva.github.io/portfolio/icon-512.png",
+        "email": "mailto:jaiminkatva@gmail.com",
+        "worksFor": { "@type": "Organization", "name": "Build India Technolab" },
+        "knowsAbout": ["Backend engineering", "System architecture", "Node.js", "MongoDB", "Docker", "GIS"],
+        "sameAs": ["https://linkedin.com/in/jaiminkatva/", "https://github.com/jaiminkatva"]
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,6 +75,12 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <p style="padding: 24px; font-family: sans-serif">
+        Jaimin Katva — Backend Engineer · Team Lead. This site needs JavaScript. Reach me at
+        <a href="mailto:jaiminkatva@gmail.com">jaiminkatva@gmail.com</a>.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

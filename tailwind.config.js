@@ -5,27 +5,29 @@ export default {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#0B0E14',
-          900: '#0B0E14',
-          800: '#12161F',
-          700: '#171C27',
-          600: '#1E2530',
-          500: '#2A3240',
+          DEFAULT: 'rgb(var(--color-ink-900) / <alpha-value>)',
+          900: 'rgb(var(--color-ink-900) / <alpha-value>)',
+          800: 'rgb(var(--color-ink-800) / <alpha-value>)',
+          700: 'rgb(var(--color-ink-700) / <alpha-value>)',
+          600: 'rgb(var(--color-ink-600) / <alpha-value>)',
+          500: 'rgb(var(--color-ink-500) / <alpha-value>)',
         },
         paper: {
-          DEFAULT: '#E8EAED',
-          dim: '#B7BFCA',
-          faint: '#7B8594',
+          DEFAULT: 'rgb(var(--color-paper) / <alpha-value>)',
+          dim: 'rgb(var(--color-paper-dim) / <alpha-value>)',
+          faint: 'rgb(var(--color-paper-faint) / <alpha-value>)',
         },
         signal: {
-          DEFAULT: '#FF8A3D',
-          dim: '#B85F24',
+          DEFAULT: 'rgb(var(--color-signal) / <alpha-value>)',
+          dim: 'rgb(var(--color-signal-dim) / <alpha-value>)',
           glow: 'rgba(255,138,61,0.35)',
         },
         system: {
-          DEFAULT: '#5EC8D8',
-          dim: '#3C8794',
+          DEFAULT: 'rgb(var(--color-system) / <alpha-value>)',
+          dim: 'rgb(var(--color-system-dim) / <alpha-value>)',
         },
+        // Hairlines and translucent tints: white on dark surfaces, slate on light ones.
+        line: 'rgb(var(--color-line) / <alpha-value>)',
       },
       fontFamily: {
         display: ['"Space Grotesk"', 'sans-serif'],

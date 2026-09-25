@@ -1,10 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { TbInfoCircle, TbRouteAltLeft } from "react-icons/tb";
+import { TbArrowLeft, TbArrowRight, TbInfoCircle, TbRouteAltLeft } from "react-icons/tb";
 import { projects } from "../data/content";
+import { getLenis } from "../hooks/useLenis";
 import TechnologyMark from "./shared/TechnologyMark";
 
-const accents = ["#FF8A3D", "#5EC8D8", "#A88BFA", "#6BD6A4"];
+const accents = ["var(--project-orange)", "var(--project-cyan)", "var(--project-purple)", "var(--project-green)"];
+
+const VIEWS = [
+  { key: "info", label: "Project overview", short: "Overview", hint: "Purpose, features and my role", Icon: TbInfoCircle },
+  { key: "case", label: "Engineering case study", short: "Case study", hint: "Problem, approach and result", Icon: TbRouteAltLeft },
+];
+
+const FOCUSABLE = 'a[href]:not([tabindex="-1"]), button:not([disabled]):not([tabindex="-1"]), [tabindex="0"]';
 
 function ArrowIcon({ diagonal = false }) {
   return (
@@ -46,7 +54,7 @@ function ProjectGlyph({ index, accent }) {
   ];
   return (
     <div
-      className="project-glyph relative grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.08] bg-white/[0.035]"
+      className="project-glyph relative grid h-14 w-14 place-items-center rounded-2xl border border-line/[0.08] bg-line/[0.035]"
       style={{ "--project-accent": accent }}>
       <span className="absolute inset-2 rounded-xl opacity-20 blur-md" style={{ background: accent }} />
       <svg
@@ -72,9 +80,9 @@ function ProjectCard({ project, index, onOpen }) {
       initial={{ opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-70px" }}
-      transition={{ duration: 0.75, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.75, delay: (index % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
       data-cursor="hover"
-      className="project-card group relative isolate flex min-h-[470px] flex-col overflow-hidden rounded-[1.75rem] border border-white/[0.08] bg-ink-800/80 p-6 backdrop-blur-sm sm:p-8"
+      className="project-card group relative isolate flex flex-col overflow-hidden rounded-[1.75rem] border border-line/[0.08] bg-ink-800/80 p-6 backdrop-blur-sm sm:min-h-[470px] sm:p-8"
       style={{ "--project-accent": accent }}>
       <div className="project-card-grid absolute inset-0 -z-10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div
@@ -99,38 +107,40 @@ function ProjectCard({ project, index, onOpen }) {
 
       <div className="mt-8">
         <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">{project.category}</span>
-        <h3 className="mt-3 max-w-md font-display text-2xl font-medium leading-tight text-paper transition-colors duration-300 group-hover:text-white sm:text-[1.7rem]">
-          {project.name}
-        </h3>
+        <h3 className="mt-3 max-w-md font-display text-2xl font-medium leading-tight text-paper sm:text-[1.7rem]">{project.name}</h3>
         <p className="mt-4 max-w-xl text-base leading-[1.75] text-paper-dim">{project.summary}</p>
       </div>
 
       <ul className="mt-6 flex flex-wrap gap-2" aria-label="Technologies">
         {project.tags.map((tag) => (
-          <li key={tag} className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 font-mono text-xs tracking-wide text-paper-dim">
+          <li key={tag} className="rounded-full border border-line/[0.08] bg-line/[0.02] px-3 py-1.5 font-mono text-xs tracking-wide text-paper-dim">
             {tag}
           </li>
         ))}
       </ul>
 
       <div className="mt-auto pt-8">
-        <div className="mb-5 flex items-center gap-3 border-t border-white/[0.07] pt-5">
+        <div className="mb-5 flex flex-col items-start gap-1.5 border-t border-line/[0.07] pt-5 sm:flex-row sm:items-center sm:gap-3">
           <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Key benefit</span>
-          <span className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+          <span className="hidden h-px flex-1 bg-gradient-to-r from-line/10 to-transparent sm:block" />
           <span className="font-display text-sm text-paper">{project.usp.title}</span>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
+            aria-haspopup="dialog"
+            aria-label={`${project.name}: project overview`}
             onClick={() => onOpen(project, "info")}
-            className="project-button inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.025] px-3 py-3 font-mono text-xs uppercase tracking-[0.08em] text-paper transition-colors hover:border-white/25 hover:bg-white/[0.055]">
-            Project info <ArrowIcon />
+            className="project-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-line/[0.1] bg-line/[0.025] px-3 py-3 font-mono text-xs uppercase tracking-[0.08em] text-paper transition-colors hover:border-line/25 hover:bg-line/[0.055]">
+            Overview <ArrowIcon />
           </button>
           <button
             type="button"
+            aria-haspopup="dialog"
+            aria-label={`${project.name}: engineering case study`}
             onClick={() => onOpen(project, "case")}
-            className="project-button inline-flex items-center justify-center gap-2 rounded-xl px-3 py-3 font-mono text-xs uppercase tracking-[0.08em] text-ink-900 transition-transform hover:-translate-y-0.5"
-            style={{ background: accent, boxShadow: `0 10px 30px ${accent}24` }}>
+            className="project-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-3 py-3 font-mono text-xs uppercase tracking-[0.08em] text-ink-900 transition-transform hover:-translate-y-0.5"
+            style={{ background: accent, boxShadow: `0 10px 30px color-mix(in srgb, ${accent} 18%, transparent)` }}>
             Case study <ArrowIcon diagonal />
           </button>
         </div>
@@ -141,12 +151,12 @@ function ProjectCard({ project, index, onOpen }) {
 
 function DetailBlock({ number, label, title, children }) {
   return (
-    <div className="project-detail-block group grid gap-4 border-t border-white/[0.08] py-7 sm:grid-cols-[108px_1fr] sm:gap-7">
-      <div className="flex items-start gap-2 sm:block">
-        <span className="project-detail-number grid h-9 w-9 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.025] font-mono text-xs">
+    <div className="project-detail-block group grid gap-4 border-t border-line/[0.08] py-7 sm:grid-cols-[108px_1fr] sm:gap-7">
+      <div className="flex items-center gap-3 sm:block">
+        <span className="project-detail-number grid h-9 w-9 place-items-center rounded-xl border border-line/[0.08] bg-line/[0.025] font-mono text-xs">
           {number}
         </span>
-        <span className="mt-2 block font-mono text-xs uppercase tracking-[0.12em] text-paper-faint">{label}</span>
+        <span className="block font-mono text-xs uppercase tracking-[0.12em] text-paper-faint sm:mt-2">{label}</span>
       </div>
       <div>
         <h4 className="font-display text-xl font-medium text-paper">{title}</h4>
@@ -158,8 +168,8 @@ function DetailBlock({ number, label, title, children }) {
 
 function TechnologyPill({ name, accent }) {
   return (
-    <span className="project-skill-pill group inline-flex items-center gap-2.5 rounded-xl border border-white/[0.08] bg-white/[0.025] py-2 pl-2 pr-3 font-mono text-xs tracking-wide text-paper-dim transition-all hover:-translate-y-0.5 hover:text-paper">
-      <span className="project-skill-icon grid h-7 w-7 place-items-center rounded-lg border border-white/[0.07] bg-ink-900/65">
+    <span className="project-skill-pill group inline-flex items-center gap-2.5 rounded-xl border border-line/[0.08] bg-line/[0.025] py-2 pl-2 pr-3 font-mono text-xs tracking-wide text-paper-dim transition-all hover:-translate-y-0.5 hover:text-paper">
+      <span className="project-skill-icon grid h-7 w-7 place-items-center rounded-lg border border-line/[0.07] bg-ink-900/65">
         <TechnologyMark name={name} className="h-4 w-4" />
       </span>
       {name}
@@ -171,36 +181,176 @@ function TechnologyPill({ name, accent }) {
   );
 }
 
-function ProjectModal({ project, initialView, onClose }) {
+function ProjectOverview({ project, accent }) {
+  return (
+    <div className="grid gap-8 lg:grid-cols-[1.15fr_.85fr]">
+      <div>
+        <p className="max-w-2xl text-base leading-[1.8] text-paper-dim">{project.description}</p>
+        <div className="mt-8 rounded-2xl border p-5 sm:p-6" style={{ borderColor: `color-mix(in srgb, ${accent} 25%, transparent)`, background: `color-mix(in srgb, ${accent} 4%, transparent)` }}>
+          <span className="font-mono text-xs uppercase tracking-[0.14em]" style={{ color: accent }}>
+            Key benefit
+          </span>
+          <h4 className="mt-3 font-display text-xl font-medium text-paper">{project.usp.title}</h4>
+          <p className="mt-2 text-base leading-relaxed text-paper-dim">{project.usp.body}</p>
+        </div>
+      </div>
+      <div className="space-y-7">
+        <div>
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Main features</span>
+          <ul className="mt-4 grid gap-2">
+            {project.modules.map((module, i) => (
+              <li key={module} className="flex items-center gap-3 text-base text-paper-dim">
+                <span className="font-mono text-xs" style={{ color: accent }}>
+                  0{i + 1}
+                </span>
+                {module}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="border-t border-line/[0.08] pt-6">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">My role</span>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {project.role.map((item) => (
+              <li key={item} className="rounded-full border border-line/[0.08] bg-line/[0.02] px-3 py-1.5 text-sm text-paper-dim">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="border-t border-line/[0.08] pt-6 lg:col-span-2">
+        <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Technology & skills</span>
+        <div className="mt-4 flex flex-wrap gap-2.5">
+          {project.allTags.map((tag) => (
+            <TechnologyPill key={tag} name={tag} accent={accent} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProjectCaseStudy({ project, accent }) {
+  return (
+    <div>
+      <DetailBlock number="01" label="Overview" title="What the product does">
+        {project.description}
+      </DetailBlock>
+      <DetailBlock number="02" label="Problem" title="Why it was needed">
+        {project.caseStudy.problem}
+      </DetailBlock>
+      <DetailBlock number="03" label="My work" title="What I was responsible for">
+        {project.role.join(" · ")}
+      </DetailBlock>
+      <DetailBlock number="04" label="Architecture" title="How the system is built">
+        {project.caseStudy.architecture}
+      </DetailBlock>
+      <DetailBlock number="05" label="Challenge" title="The main technical challenge">
+        {project.caseStudy.challenge}
+      </DetailBlock>
+      <DetailBlock number="06" label="Solution" title={project.usp.title}>
+        {project.caseStudy.solution}
+      </DetailBlock>
+      <DetailBlock number="07" label="Workflow" title="How the product works">
+        <ol className="mt-4 grid gap-3 sm:grid-cols-2">
+          {project.caseStudy.workflow.map((step, i) => (
+            <li key={step} className="flex gap-3 rounded-xl border border-line/[0.07] bg-line/[0.02] p-3">
+              <span className="font-mono text-xs" style={{ color: accent }}>
+                0{i + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </DetailBlock>
+      <DetailBlock number="08" label="Result" title="What the system made possible">
+        {project.caseStudy.outcome}
+      </DetailBlock>
+      <DetailBlock number="09" label="Technology" title="Tools and technical skills">
+        <div className="flex flex-wrap gap-2.5">
+          {project.allTags.map((tag) => (
+            <TechnologyPill key={tag} name={tag} accent={accent} />
+          ))}
+        </div>
+      </DetailBlock>
+    </div>
+  );
+}
+
+function ProjectModal({ project, initialView, onClose, onNavigate }) {
   const [view, setView] = useState(initialView);
+  const dialogRef = useRef(null);
   const closeRef = useRef(null);
+  const scrollRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   const reduceMotion = useReducedMotion();
   const index = projects.findIndex((item) => item.id === project.id);
   const accent = accents[index];
+  const previous = projects[(index - 1 + projects.length) % projects.length];
+  const next = projects[(index + 1) % projects.length];
+  const tabId = (key) => `project-tab-${key}`;
 
+  // Once per opening: freeze the page behind, keep keyboard focus inside the
+  // dialog, and hand focus back to whatever opened it on close.
   useEffect(() => {
+    const opener = document.activeElement;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
+    getLenis()?.stop();
+    closeRef.current?.focus({ preventScroll: true });
+
     function handleKey(event) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onCloseRef.current();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(dialogRef.current.querySelectorAll(FOCUSABLE)).filter((el) => el.getClientRects().length > 0);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const inside = dialogRef.current.contains(document.activeElement);
+      if (event.shiftKey && (!inside || document.activeElement === first)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (!inside || document.activeElement === last)) {
+        event.preventDefault();
+        first.focus();
+      }
     }
     window.addEventListener("keydown", handleKey);
     return () => {
       document.body.style.overflow = previousOverflow;
+      getLenis()?.start();
       window.removeEventListener("keydown", handleKey);
+      if (opener instanceof HTMLElement) opener.focus({ preventScroll: true });
     };
-  }, [onClose]);
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [project.id]);
+
+  function handleTabKey(event) {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    const nextView = view === "info" ? "case" : "info";
+    setView(nextView);
+    document.getElementById(tabId(nextView))?.focus();
+  }
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-black/75 p-0 backdrop-blur-md sm:items-center sm:p-5"
+      className="modal-backdrop fixed inset-0 z-[100] flex items-end justify-center p-0 backdrop-blur-md sm:items-center sm:p-5"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: reduceMotion ? 0 : 0.25 }}
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <motion.div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={`project-${project.id}-title`}
@@ -208,18 +358,18 @@ function ProjectModal({ project, initialView, onClose }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: reduceMotion ? 0 : 20, scale: reduceMotion ? 1 : 0.99 }}
         transition={{ duration: reduceMotion ? 0 : 0.42, ease: [0.16, 1, 0.3, 1] }}
-        className="project-modal relative flex h-[94dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-[1.75rem] border border-white/[0.1] bg-ink-800 shadow-2xl sm:h-[min(900px,94vh)] sm:rounded-[1.75rem]"
+        className="project-modal relative flex h-[94dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-[1.75rem] border border-line/[0.1] bg-ink-800 shadow-2xl sm:h-[min(900px,94vh)] sm:rounded-[1.75rem]"
         style={{ "--project-accent": accent }}>
         <div className="project-modal-grid pointer-events-none absolute inset-0 opacity-40" />
         <div className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full opacity-[0.1] blur-[90px]" style={{ background: accent }} />
         <div className="absolute inset-x-10 top-0 z-20 h-px" style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }} />
 
-        <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-white/[0.08] bg-ink-800/85 px-5 py-4 backdrop-blur-xl sm:px-8">
+        <div className="relative z-10 flex shrink-0 items-center justify-between border-b border-line/[0.08] bg-ink-800/85 px-5 py-3 backdrop-blur-xl sm:px-8 sm:py-4">
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs uppercase tracking-[0.16em]" style={{ color: accent }}>
               Featured work
             </span>
-            <span className="hidden h-1 w-1 rounded-full bg-paper-faint sm:block" />
+            <span className="h-1 w-1 rounded-full bg-paper-faint" />
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Project {project.index}</span>
           </div>
           <div className="flex items-center gap-3">
@@ -232,176 +382,124 @@ function ProjectModal({ project, initialView, onClose }) {
               type="button"
               onClick={onClose}
               aria-label="Close project details"
-              className="project-modal-close grid h-10 w-10 place-items-center rounded-xl border border-white/[0.1] bg-white/[0.025] text-paper-dim transition-all hover:border-white/25 hover:bg-white/[0.06] hover:text-paper">
+              className="project-modal-close grid h-10 w-10 place-items-center rounded-xl border border-line/[0.1] bg-line/[0.025] text-paper-dim transition-all hover:border-line/25 hover:bg-line/[0.06] hover:text-paper">
               <CloseIcon />
             </button>
           </div>
         </div>
 
         <div
+          ref={scrollRef}
           data-lenis-prevent
-          data-lenis-prevent-wheel
-          data-lenis-prevent-touch
           tabIndex="0"
           aria-label={`${project.name} project details`}
           className="project-modal-scroll relative min-h-0 flex-1 overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
-          onWheelCapture={(event) => event.stopPropagation()}>
-          <div className="px-5 pb-10 pt-8 sm:px-8 sm:pt-10 lg:px-12">
-            <div className="project-modal-intro relative overflow-hidden rounded-2xl border border-white/[0.07] bg-ink-900/35 p-5 sm:p-7">
-              <div className="absolute -right-16 -top-20 h-52 w-52 rounded-full opacity-[0.08] blur-[58px]" style={{ background: accent }} />
-              <div className="relative flex items-start gap-4 sm:gap-5">
-                <div className="shrink-0">
-                  <ProjectGlyph index={index} accent={accent} />
-                </div>
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    <span className="font-mono text-xs uppercase tracking-[0.15em]" style={{ color: accent }}>
-                      {project.category}
-                    </span>
-                    <span className="h-1 w-1 rounded-full bg-paper-faint" />
-                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-paper-faint">{project.tags.slice(0, 2).join(" · ")}</span>
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, x: reduceMotion ? 0 : 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: reduceMotion ? 0 : -12 }}
+              transition={{ duration: reduceMotion ? 0 : 0.22 }}
+              className="px-5 pb-10 pt-5 sm:px-8 sm:pt-10 lg:px-12">
+              <div className="project-modal-intro relative overflow-hidden rounded-2xl border border-line/[0.07] bg-ink-900/35 p-5 sm:p-7">
+                <div className="absolute -right-16 -top-20 h-52 w-52 rounded-full opacity-[0.08] blur-[58px]" style={{ background: accent }} />
+                <div className="relative flex items-start gap-4 sm:gap-5">
+                  <div className="hidden shrink-0 sm:block">
+                    <ProjectGlyph index={index} accent={accent} />
                   </div>
-                  <h3
-                    id={`project-${project.id}-title`}
-                    className="mt-3 max-w-3xl font-display text-3xl font-medium leading-[1.07] tracking-[-0.025em] text-paper sm:text-4xl lg:text-[2.75rem]">
-                    {project.fullTitle}
-                  </h3>
-                  <p className="mt-4 max-w-3xl text-base leading-[1.7] text-paper-dim">{project.summary}</p>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                      <span className="font-mono text-xs uppercase tracking-[0.15em]" style={{ color: accent }}>
+                        {project.category}
+                      </span>
+                      <span className="h-1 w-1 rounded-full bg-paper-faint" />
+                      <span className="font-mono text-xs uppercase tracking-[0.12em] text-paper-faint">{project.tags.slice(0, 2).join(" · ")}</span>
+                    </div>
+                    <h3
+                      id={`project-${project.id}-title`}
+                      className="text-balance mt-3 max-w-3xl font-display text-[1.65rem] font-medium leading-[1.1] tracking-[-0.025em] text-paper sm:text-4xl lg:text-[2.75rem]">
+                      {project.fullTitle}
+                    </h3>
+                    <p className="mt-4 hidden max-w-3xl text-base leading-[1.7] text-paper-dim sm:block">{project.summary}</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="project-modal-tabs mt-5 grid gap-3 sm:grid-cols-2" role="tablist" aria-label="Choose project details">
-              <button
-                type="button"
-                role="tab"
-                aria-selected={view === "info"}
-                onClick={() => setView("info")}
-                className={`project-view-tab group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all ${view === "info" ? "is-active" : "border-white/[0.07] bg-white/[0.015]"}`}
-                style={{ "--tab-accent": accent }}>
-                <span className="project-view-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-ink-900/60 text-paper-dim">
-                  <TbInfoCircle className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block font-display text-base font-medium text-paper">Project overview</span>
-                  <span className="mt-1 block text-sm text-paper-faint">Purpose, features and my role</span>
-                </span>
-                <span className="ml-auto font-mono text-xs text-paper-faint">01</span>
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={view === "case"}
-                onClick={() => setView("case")}
-                className={`project-view-tab group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all ${view === "case" ? "is-active" : "border-white/[0.07] bg-white/[0.015]"}`}
-                style={{ "--tab-accent": accent }}>
-                <span className="project-view-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-ink-900/60 text-paper-dim">
-                  <TbRouteAltLeft className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="block font-display text-base font-medium text-paper">Engineering case study</span>
-                  <span className="mt-1 block text-sm text-paper-faint">Problem, approach and result</span>
-                </span>
-                <span className="ml-auto font-mono text-xs text-paper-faint">02</span>
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={view}
-                initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }}
-                transition={{ duration: reduceMotion ? 0 : 0.25 }}
-                className="mt-10">
-                {view === "info" ? (
-                  <div className="grid gap-8 lg:grid-cols-[1.15fr_.85fr]">
-                    <div>
-                      <p className="max-w-2xl text-base leading-[1.8] text-paper-dim">{project.description}</p>
-                      <div className="mt-8 rounded-2xl border p-5 sm:p-6" style={{ borderColor: `${accent}40`, background: `${accent}0b` }}>
-                        <span className="font-mono text-xs uppercase tracking-[0.14em]" style={{ color: accent }}>
-                          Key benefit
+              <div className="project-modal-tabs mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:gap-3" role="tablist" aria-label="Choose project details" onKeyDown={handleTabKey}>
+                {VIEWS.map(({ key, label, short, hint, Icon }, i) => {
+                  const selected = view === key;
+                  return (
+                    <button
+                      key={key}
+                      id={tabId(key)}
+                      type="button"
+                      role="tab"
+                      aria-selected={selected}
+                      aria-controls="project-panel"
+                      tabIndex={selected ? 0 : -1}
+                      onClick={() => setView(key)}
+                      className={`project-view-tab group flex items-center gap-3 rounded-2xl border p-3 text-left transition-all sm:gap-4 sm:p-4 ${selected ? "is-active" : "border-line/[0.07] bg-line/[0.015]"}`}
+                      style={{ "--tab-accent": accent }}>
+                      <span className="project-view-icon grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-line/[0.08] bg-ink-900/60 text-paper-dim sm:h-10 sm:w-10">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block font-display text-sm font-medium text-paper sm:text-base">
+                          <span className="sm:hidden">{short}</span>
+                          <span className="hidden sm:inline">{label}</span>
                         </span>
-                        <h4 className="mt-3 font-display text-xl font-medium text-paper">{project.usp.title}</h4>
-                        <p className="mt-2 text-base leading-relaxed text-paper-dim">{project.usp.body}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-7">
-                      <div>
-                        <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Main features</span>
-                        <ul className="mt-4 grid gap-2">
-                          {project.modules.map((module, i) => (
-                            <li key={module} className="flex items-center gap-3 text-base text-paper-dim">
-                              <span className="font-mono text-xs" style={{ color: accent }}>
-                                0{i + 1}
-                              </span>
-                              {module}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="border-t border-white/[0.08] pt-6">
-                        <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">My role</span>
-                        <p className="mt-3 text-base leading-relaxed text-paper-dim">{project.role.join(" · ")}</p>
-                      </div>
-                    </div>
-                    <div className="border-t border-white/[0.08] pt-6 lg:col-span-2">
-                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Technology & skills</span>
-                      <div className="mt-4 flex flex-wrap gap-2.5">
-                        {project.allTags.map((tag) => (
-                          <TechnologyPill key={tag} name={tag} accent={accent} />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <DetailBlock number="01" label="Overview" title="What the product does">
-                      {project.description}
-                    </DetailBlock>
-                    <DetailBlock number="02" label="Problem" title="Why it was needed">
-                      {project.caseStudy.problem}
-                    </DetailBlock>
-                    <DetailBlock number="03" label="My work" title="What I was responsible for">
-                      {project.role.join(" · ")}
-                    </DetailBlock>
-                    <DetailBlock number="04" label="Architecture" title="How the system is built">
-                      {project.caseStudy.architecture}
-                    </DetailBlock>
-                    <DetailBlock number="05" label="Challenge" title="The main technical challenge">
-                      {project.caseStudy.challenge}
-                    </DetailBlock>
-                    <DetailBlock number="06" label="Solution" title={project.usp.title}>
-                      {project.caseStudy.solution}
-                    </DetailBlock>
-                    <DetailBlock number="07" label="Workflow" title="How the product works">
-                      <ol className="mt-4 grid gap-3 sm:grid-cols-2">
-                        {project.caseStudy.workflow.map((step, i) => (
-                          <li key={step} className="flex gap-3 rounded-xl border border-white/[0.07] bg-white/[0.02] p-3">
-                            <span className="font-mono text-xs" style={{ color: accent }}>
-                              0{i + 1}
-                            </span>
-                            <span>{step}</span>
-                          </li>
-                        ))}
-                      </ol>
-                    </DetailBlock>
-                    <DetailBlock number="08" label="Result" title="What the system made possible">
-                      {project.caseStudy.outcome}
-                    </DetailBlock>
-                    <DetailBlock number="09" label="Technology" title="Tools and technical skills">
-                      <div className="flex flex-wrap gap-2.5">
-                        {project.allTags.map((tag) => (
-                          <TechnologyPill key={tag} name={tag} accent={accent} />
-                        ))}
-                      </div>
-                    </DetailBlock>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
+                        <span className="mt-1 hidden text-sm text-paper-faint sm:block">{hint}</span>
+                      </span>
+                      <span className="ml-auto hidden font-mono text-xs text-paper-faint sm:block">0{i + 1}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={view}
+                  id="project-panel"
+                  role="tabpanel"
+                  aria-labelledby={tabId(view)}
+                  initial={{ opacity: 0, y: reduceMotion ? 0 : 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: reduceMotion ? 0 : -8 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                  className="mt-8 sm:mt-10">
+                  {view === "info" ? <ProjectOverview project={project} accent={accent} /> : <ProjectCaseStudy project={project} accent={accent} />}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        <div className="relative z-10 flex shrink-0 items-center justify-between gap-3 border-t border-line/[0.08] bg-ink-800/90 px-3 py-2.5 backdrop-blur-xl sm:px-6">
+          <button
+            type="button"
+            onClick={() => onNavigate(previous)}
+            className="group flex min-w-0 max-w-[45%] items-center gap-2.5 rounded-xl px-2 py-1.5 text-left text-paper-dim transition-colors hover:bg-line/[0.04] hover:text-paper">
+            <TbArrowLeft className="h-4 w-4 shrink-0 transition-transform group-hover:-translate-x-0.5" aria-hidden="true" />
+            <span className="min-w-0">
+              <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">Previous</span>
+              <span className="block truncate text-sm">{previous.name}</span>
+            </span>
+          </button>
+          <span className="hidden font-mono text-xs text-paper-faint sm:block">
+            {project.index} / {String(projects.length).padStart(2, "0")}
+          </span>
+          <button
+            type="button"
+            onClick={() => onNavigate(next)}
+            className="group flex min-w-0 max-w-[45%] items-center gap-2.5 rounded-xl px-2 py-1.5 text-right text-paper-dim transition-colors hover:bg-line/[0.04] hover:text-paper">
+            <span className="min-w-0">
+              <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">Next</span>
+              <span className="block truncate text-sm">{next.name}</span>
+            </span>
+            <TbArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </button>
         </div>
       </motion.div>
     </motion.div>
@@ -410,9 +508,9 @@ function ProjectModal({ project, initialView, onClose }) {
 
 export default function Projects() {
   const [selection, setSelection] = useState(null);
-  function openProject(project, view) {
-    setSelection({ project, view });
-  }
+  const openProject = useCallback((project, view) => setSelection({ project, view }), []);
+  const closeProject = useCallback(() => setSelection(null), []);
+  const showProject = useCallback((project) => setSelection((current) => ({ ...current, project })), []);
 
   return (
     <section id="work" className="featured-work relative overflow-hidden border-t border-ink-600 py-20 md:py-28">
@@ -428,7 +526,7 @@ export default function Projects() {
               className="mb-5 flex items-center gap-3">
               <span className="font-mono text-xs uppercase tracking-[0.18em] text-signal">Featured Work</span>
               <span className="h-px w-14 bg-gradient-to-r from-signal/70 to-transparent" />
-              <span className="font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">Selected systems / 01—04</span>
+              <span className="hidden font-mono text-xs uppercase tracking-[0.14em] text-paper-faint sm:inline">Selected systems / 01—04</span>
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
@@ -459,7 +557,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-70px" }}
-          className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+          className="mt-6 flex flex-col gap-4 rounded-2xl border border-line/[0.07] bg-line/[0.02] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
           <div className="flex items-center gap-4">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-system/20 bg-system/[0.07] font-mono text-sm text-system">{`{ }`}</span>
             <div>
@@ -475,7 +573,9 @@ export default function Projects() {
         </motion.div>
       </div>
       <AnimatePresence>
-        {selection && <ProjectModal key={selection.project.id} project={selection.project} initialView={selection.view} onClose={() => setSelection(null)} />}
+        {selection && (
+          <ProjectModal key="project-modal" project={selection.project} initialView={selection.view} onClose={closeProject} onNavigate={showProject} />
+        )}
       </AnimatePresence>
     </section>
   );

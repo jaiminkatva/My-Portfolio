@@ -19,7 +19,7 @@ const reveal = {
 
 function ProfileCard() {
   return (
-    <div className="about-profile relative overflow-hidden border-b border-white/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r">
+    <div className="about-profile relative overflow-hidden border-b border-line/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r">
       <div className="about-profile-grid pointer-events-none absolute inset-0" />
 
       <div className="relative flex items-center justify-between gap-4">
@@ -36,11 +36,11 @@ function ProfileCard() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-        className="about-identity relative mt-9 overflow-hidden rounded-2xl border border-white/[0.09] bg-ink-900/65 p-6">
-        <div className="absolute right-0 top-0 h-24 w-24 border-b border-l border-white/[0.05] bg-signal/[0.035] [clip-path:polygon(100%_0,100%_100%,0_0)]" />
+        className="about-identity relative mt-9 overflow-hidden rounded-2xl border border-line/[0.09] bg-ink-900/65 p-6">
+        <div className="absolute right-0 top-0 h-24 w-24 border-b border-l border-line/[0.05] bg-signal/[0.035] [clip-path:polygon(100%_0,100%_100%,0_0)]" />
         <div className="flex items-center gap-5">
           <div className="about-monogram grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-signal/25 p-2.5">
-            <img src={`${import.meta.env.BASE_URL}jklogo.png`} alt="Jaimin Katva logo" className="h-full w-full object-contain" />
+            <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="Jaimin Katva logo" width="60" height="52" className="h-full w-full object-contain" />
           </div>
           <div>
             <h3 className="font-display text-2xl font-medium text-paper">Jaimin Katva</h3>
@@ -48,9 +48,9 @@ function ProfileCard() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-3 border-t border-white/[0.08] pt-5">
+        <div className="mt-6 grid grid-cols-3 border-t border-line/[0.08] pt-5">
           {["Backend", "Systems", "Product"].map((item, index) => (
-            <div key={item} className={index ? "border-l border-white/[0.08] pl-3 sm:pl-4" : ""}>
+            <div key={item} className={index ? "border-l border-line/[0.08] pl-3 sm:pl-4" : ""}>
               <span className="block font-mono text-xs text-signal">0{index + 1}</span>
               <span className="mt-1 block text-sm text-paper-dim">{item}</span>
             </div>
@@ -79,7 +79,7 @@ function ProfileCard() {
 function StoryPanel() {
   return (
     <div className="p-6 sm:p-8 lg:p-10">
-      <div className="flex items-end justify-between gap-6 border-b border-white/[0.08] pb-6">
+      <div className="flex items-end justify-between gap-6 border-b border-line/[0.08] pb-6">
         <div>
           <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">How I work</span>
           <h3 className="mt-3 font-display text-2xl font-medium text-paper sm:text-3xl">The work behind the title.</h3>
@@ -99,8 +99,8 @@ function StoryPanel() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-45px" }}
-              className="about-story relative grid grid-cols-[44px_1fr] gap-5 border-b border-white/[0.07] py-6 last:border-b-0 sm:gap-6">
-              <span className="relative z-10 grid h-11 w-11 place-items-center rounded-xl border border-white/[0.09] bg-ink-800 text-paper-faint">
+              className="about-story relative grid grid-cols-[44px_1fr] gap-5 border-b border-line/[0.07] py-6 last:border-b-0 sm:gap-6">
+              <span className="relative z-10 grid h-11 w-11 place-items-center rounded-xl border border-line/[0.09] bg-ink-800 text-paper-faint">
                 <Icon className="h-5 w-5" />
               </span>
               <div>
@@ -120,7 +120,7 @@ function StoryPanel() {
 
 export default function About() {
   return (
-    <section id="about" className="section-shell relative overflow-hidden border-t border-white/[0.06] py-20 md:py-28">
+    <section id="about" className="section-shell relative overflow-hidden border-t border-line/[0.06] py-20 md:py-28">
       <div className="bp-grid pointer-events-none absolute inset-0 opacity-[0.13] [mask-image:radial-gradient(ellipse_68%_60%_at_20%_45%,black,transparent)]" />
 
       <div className="relative mx-auto max-w-content px-6 md:px-10">
@@ -131,7 +131,7 @@ export default function About() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-70px" }}
-            className="flex items-center gap-4 border-l border-white/[0.1] pl-5">
+            className="flex items-center gap-4 border-l border-line/[0.1] pl-5">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-signal/20 bg-signal/[0.07] text-signal">
               <TbTopologyStar3 className="h-5 w-5" />
             </span>
@@ -144,8 +144,8 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-70px" }}
           transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
-          className="about-board mt-11 overflow-hidden rounded-[1.75rem] border border-white/[0.09] bg-ink-800/70">
-          <div className="flex min-h-14 items-center justify-between border-b border-white/[0.08] bg-ink-900/45 px-5 sm:px-7">
+          className="about-board mt-11 overflow-hidden rounded-[1.75rem] border border-line/[0.09] bg-ink-800/70">
+          <div className="flex min-h-14 items-center justify-between border-b border-line/[0.08] bg-ink-900/45 px-5 sm:px-7">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">About Jaimin</span>
               <span className="hidden h-px w-10 bg-gradient-to-r from-signal/60 to-transparent sm:block" />
@@ -162,7 +162,7 @@ export default function About() {
           </div>
         </motion.div>
 
-        <div className="about-strengths mt-5 grid overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-800/55 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="about-strengths mt-5 grid overflow-hidden rounded-2xl border border-line/[0.08] bg-ink-800/55 sm:grid-cols-2 lg:grid-cols-4">
           {about.distinctive.map((line, index) => {
             const Icon = strengthIcons[index];
             return (
@@ -173,7 +173,7 @@ export default function About() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-45px" }}
-                className="about-strength relative border-b border-white/[0.07] p-5 sm:border-r lg:border-b-0">
+                className="about-strength relative border-b border-line/[0.07] p-5 sm:border-r lg:border-b-0">
                 <span className="grid h-10 w-10 place-items-center rounded-xl border border-system/20 bg-system/[0.055] text-system">
                   <Icon className="h-5 w-5" />
                 </span>
