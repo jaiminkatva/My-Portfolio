@@ -244,17 +244,6 @@ h4 {
   -webkit-background-clip: text;
 }
 
-.project-card {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 24px 70px rgba(0, 0, 0, 0.14);
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), border-color 400ms ease, box-shadow 400ms ease;
-}
-
-.project-card:hover {
-  transform: translateY(-6px);
-  border-color: color-mix(in srgb, var(--project-accent) 34%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 28px 80px rgba(0, 0, 0, 0.26), 0 0 40px color-mix(in srgb, var(--project-accent) 6%, transparent);
-}
-
 .project-card-grid,
 .project-modal-grid {
   background-image: linear-gradient(rgba(232, 234, 237, 0.035) 1px, transparent 1px),
@@ -272,143 +261,12 @@ h4 {
   transition: border-color 400ms ease, transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-card:hover .project-glyph::after {
-  border-color: color-mix(in srgb, var(--project-accent) 35%, transparent);
-  transform: rotate(7deg) scale(1.08);
-}
-
-.project-button {
-  position: relative;
-  min-height: 42px;
-  overflow: hidden;
-  isolation: isolate;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 10px 28px rgba(0, 0, 0, 0.13);
-}
-
-.project-button::before {
-  content: '';
-  position: absolute;
-  top: -60%;
-  bottom: -60%;
-  left: -35%;
-  width: 22%;
-  z-index: -1;
-  background: rgba(255, 255, 255, 0.22);
-  filter: blur(8px);
-  transform: skewX(-22deg);
-  transition: left 650ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.project-button:hover::before {
-  left: 115%;
-}
-
-.project-button svg,
 .magnetic-button svg {
   transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.project-button:hover svg,
 .magnetic-button:hover svg {
   transform: translateX(3px);
-}
-
-.project-modal {
-  scrollbar-color: color-mix(in srgb, var(--project-accent) 55%, #2a3240) #12161f;
-  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.045);
-}
-
-.project-modal-scroll {
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--project-accent) 58%, #2a3240) transparent;
-}
-
-.project-modal-scroll::-webkit-scrollbar {
-  width: 8px;
-}
-
-.project-modal-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.project-modal-scroll::-webkit-scrollbar-thumb {
-  border: 2px solid #12161f;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--project-accent) 62%, #2a3240);
-}
-
-.project-modal-scroll:focus-visible {
-  outline: none;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--project-accent) 24%, transparent);
-}
-
-.project-modal-tabs {
-  position: relative;
-}
-
-.project-modal-intro::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: linear-gradient(rgba(232, 234, 237, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232, 234, 237, 0.025) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(90deg, transparent 20%, black);
-}
-
-.project-view-tab {
-  position: relative;
-  overflow: hidden;
-  min-width: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
-}
-
-.project-view-tab::after {
-  content: '';
-  position: absolute;
-  right: 16px;
-  bottom: 0;
-  left: 16px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--tab-accent), transparent);
-  opacity: 0;
-  transform: scaleX(0.45);
-  transition: opacity 300ms ease, transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.project-view-tab:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.project-view-tab.is-active {
-  border-color: color-mix(in srgb, var(--tab-accent) 34%, transparent);
-  background: linear-gradient(115deg, color-mix(in srgb, var(--tab-accent) 8%, #12161f), rgba(18, 22, 31, 0.72));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 12px 32px rgba(0, 0, 0, 0.14);
-}
-
-.project-view-tab.is-active::after {
-  opacity: 0.8;
-  transform: scaleX(1);
-}
-
-.project-view-icon {
-  transition: color 300ms ease, border-color 300ms ease, transform 400ms cubic-bezier(0.16, 1, 0.3, 1), background-color 300ms ease;
-}
-
-.project-view-tab:hover .project-view-icon,
-.project-view-tab.is-active .project-view-icon {
-  color: var(--tab-accent);
-  border-color: color-mix(in srgb, var(--tab-accent) 30%, transparent);
-  background: color-mix(in srgb, var(--tab-accent) 7%, #0b0e14);
-  transform: rotate(-4deg) scale(1.04);
-}
-
-.project-view-tab:focus-visible {
-  outline: 1px solid var(--tab-accent);
-  outline-offset: 2px;
 }
 
 .project-modal-close:hover svg {
@@ -477,6 +335,703 @@ h4 {
 .project-skill-pill:hover .project-skill-icon svg {
   transform: scale(1.12) rotate(-3deg);
   filter: drop-shadow(0 3px 8px currentColor);
+}
+
+/* Project dossier: a book whose leaves turn around the spine in 3D.
+   Leaves rotate with CSS transforms; lighting, page stacks and shadows are
+   separate layers so the turn reads as paper rather than a rotating card. */
+.flipbook-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.flipbook-viewport {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.flipbook-book,
+.featured-book {
+  --book-page: rgb(var(--color-ink-800));
+  --book-edge: #2b3342;
+  --book-edge-alt: #141922;
+  --book-gutter: rgba(0, 0, 0, 0.5);
+  --book-shade: rgba(0, 0, 0, 0.55);
+  --book-lift: rgba(0, 0, 0, 0.5);
+  --book-shadow: 0 44px 70px -34px rgba(0, 0, 0, 0.9), 0 18px 44px rgba(0, 0, 0, 0.38);
+}
+
+.flipbook-book {
+  --flip-ease: cubic-bezier(0.6, 0.05, 0.4, 0.95); /* symmetric, so 90° lands exactly at the halfway z-index swap */
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 2600px;
+  /* Only the paper is solid; the empty half beside a closed cover is backdrop. */
+  pointer-events: none;
+  transition: transform var(--flip-ms) var(--flip-ease) var(--shift-delay, 0ms);
+}
+
+.flipbook-book > * {
+  pointer-events: auto;
+}
+
+.flipbook-book.is-single {
+  perspective: 1700px;
+  /* Turned pages swing off the left edge, behind the binding. */
+  clip-path: inset(-80px -80px -80px 0);
+}
+
+.flipbook-base {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  border-radius: 3px 10px 10px 3px;
+  background: var(--book-page);
+  box-shadow: var(--book-shadow);
+  transition: visibility 0s linear var(--base-delay, 0ms);
+}
+
+.flipbook-base.is-left {
+  left: 0;
+  border-radius: 10px 3px 3px 10px;
+}
+
+.is-single > .flipbook-base {
+  left: 0;
+  width: 100%;
+}
+
+.flipbook-base.is-empty {
+  visibility: hidden;
+}
+
+/* Edges of the pages still underneath, thicker the more pages remain. */
+.flipbook-stack {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 100%;
+  border-radius: 0 4px 4px 0;
+  background: repeating-linear-gradient(90deg, var(--book-edge) 0 1px, var(--book-edge-alt) 1px 2px);
+  transition: width var(--flip-ms) var(--flip-ease);
+}
+
+.flipbook-base.is-left .flipbook-stack {
+  right: 100%;
+  left: auto;
+  border-radius: 4px 0 0 4px;
+}
+
+.flipbook-leaf {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  transition: transform var(--flip-ms) var(--flip-ease) var(--leaf-delay, 0ms),
+    z-index 0s linear calc(var(--leaf-delay, 0ms) + var(--flip-ms) / 2);
+}
+
+.is-single > .flipbook-leaf {
+  left: 0;
+  width: 100%;
+}
+
+.flipbook-leaf.is-turned {
+  transform: rotateY(-180deg);
+}
+
+.flipbook-leaf.is-turning {
+  will-change: transform;
+}
+
+.flipbook-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid rgb(var(--color-line) / 0.07);
+  background: var(--book-page);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flipbook-face.is-front {
+  border-left-width: 0;
+  border-radius: 3px 10px 10px 3px;
+  transform: rotateY(0deg);
+}
+
+.flipbook-face.is-back {
+  border-right-width: 0;
+  border-radius: 10px 3px 3px 10px;
+  transform: rotateY(180deg);
+}
+
+.flipbook-page {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.is-single .flipbook-page {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.is-single .flipbook-page::-webkit-scrollbar {
+  display: none;
+}
+
+.flipbook-gutter,
+.flipbook-cast,
+.flipbook-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Spine shading: paper curving into the binding. */
+.is-front > .flipbook-gutter {
+  background: linear-gradient(90deg, var(--book-gutter), color-mix(in srgb, var(--book-gutter) 30%, transparent) 3%, transparent 10%);
+}
+
+.is-back > .flipbook-gutter {
+  background: linear-gradient(270deg, var(--book-gutter), color-mix(in srgb, var(--book-gutter) 30%, transparent) 3%, transparent 10%);
+}
+
+.is-single .is-front > .flipbook-gutter {
+  background: linear-gradient(90deg, var(--book-gutter), transparent 5%);
+}
+
+/* The turning page darkens as it tips away from the light, deepest when edge-on. */
+.flipbook-shade {
+  opacity: 0;
+}
+
+.is-front > .flipbook-shade {
+  background: linear-gradient(90deg, var(--book-shade), color-mix(in srgb, var(--book-shade) 35%, transparent) 42%, rgba(255, 255, 255, 0.05) 76%, color-mix(in srgb, var(--book-shade) 25%, transparent));
+}
+
+.is-back > .flipbook-shade {
+  background: linear-gradient(270deg, var(--book-shade), color-mix(in srgb, var(--book-shade) 35%, transparent) 42%, rgba(255, 255, 255, 0.05) 76%, color-mix(in srgb, var(--book-shade) 25%, transparent));
+}
+
+.flipbook-leaf.is-turning .flipbook-shade {
+  animation: flipbook-light var(--flip-ms) linear var(--leaf-delay, 0ms) both;
+}
+
+/* Shadow the turning page casts on the pages beneath it. */
+.flipbook-cast {
+  opacity: 0;
+}
+
+.is-front > .flipbook-cast {
+  background: linear-gradient(90deg, var(--book-shade), color-mix(in srgb, var(--book-shade) 30%, transparent) 30%, transparent 62%);
+}
+
+.is-back > .flipbook-cast {
+  background: linear-gradient(270deg, var(--book-shade), color-mix(in srgb, var(--book-shade) 30%, transparent) 30%, transparent 62%);
+}
+
+.flipbook-face.is-revealed .flipbook-cast {
+  animation: flipbook-reveal var(--flip-ms) linear var(--cast-delay, 0ms) both;
+}
+
+.flipbook-face.is-covered .flipbook-cast {
+  animation: flipbook-cover var(--flip-ms) linear var(--cast-delay, 0ms) both;
+}
+
+/* Paper thickness: a thin strip standing on the free edge, seen when the leaf is edge-on. */
+.flipbook-leaf-edge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(90deg, var(--book-edge-alt), var(--book-edge), var(--book-edge-alt));
+  transform: translateX(2px) rotateY(90deg);
+  pointer-events: none;
+}
+
+.flipbook-leaf-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px 10px 10px 3px;
+  box-shadow: 0 0 46px var(--book-lift);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flipbook-leaf.is-turning .flipbook-leaf-shadow {
+  animation: flipbook-lift var(--flip-ms) linear var(--leaf-delay, 0ms) both;
+}
+
+/* Click zones along the outer page edges, with a corner that curls on hover. */
+.flipbook-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  width: 44px;
+  cursor: pointer;
+}
+
+.is-single > .flipbook-edge {
+  width: 22px;
+}
+
+.flipbook-edge.is-prev {
+  left: 0;
+}
+
+.flipbook-edge.is-next {
+  right: 0;
+}
+
+.flipbook-edge::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  filter: drop-shadow(0 0 6px var(--book-lift));
+  transition: width 280ms cubic-bezier(0.16, 1, 0.3, 1), height 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.flipbook-edge.is-next::after {
+  right: 0;
+  border-top-left-radius: 6px;
+  background: linear-gradient(to top left, transparent 50%, var(--book-edge) 50%, var(--book-page) 90%);
+}
+
+.flipbook-edge.is-prev::after {
+  left: 0;
+  border-top-right-radius: 6px;
+  background: linear-gradient(to top right, transparent 50%, var(--book-edge) 50%, var(--book-page) 90%);
+}
+
+.is-single > .flipbook-edge.is-prev::after {
+  display: none;
+}
+
+@media (hover: hover) {
+  .flipbook-edge:hover::after {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* Turning a page by hand. The leaf follows the pointer from script; these rules
+   keep it on top, light it by how far it has lifted and let it settle smoothly. */
+@property --drag-light {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --drag-cast {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.flipbook-face {
+  cursor: grab;
+}
+
+.flipbook-page {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.flipbook-stage[data-grabbing],
+.flipbook-stage[data-grabbing] * {
+  cursor: grabbing !important;
+}
+
+.flipbook-leaf[data-dragging],
+.flipbook-leaf[data-releasing] {
+  z-index: 999 !important;
+  will-change: transform;
+}
+
+.flipbook-leaf[data-dragging] {
+  transition: none;
+}
+
+.flipbook-leaf[data-dragging] .flipbook-shade,
+.flipbook-leaf[data-releasing] .flipbook-shade {
+  opacity: calc(var(--drag-light) * 0.9);
+  animation: none;
+}
+
+.flipbook-leaf[data-dragging] .flipbook-leaf-shadow,
+.flipbook-leaf[data-releasing] .flipbook-leaf-shadow {
+  opacity: var(--drag-light);
+  animation: none;
+}
+
+.flipbook-face[data-cast] .flipbook-cast {
+  opacity: var(--drag-cast);
+  animation: none;
+}
+
+@keyframes flipbook-light {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes flipbook-lift {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  75% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes flipbook-reveal {
+  0% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes flipbook-cover {
+  0%,
+  45% {
+    opacity: 0;
+  }
+  92% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.dossier-cover {
+  background: radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--project-accent) 12%, transparent), transparent 55%),
+    linear-gradient(165deg, color-mix(in srgb, var(--project-accent) 6%, rgb(var(--color-ink-900))), rgb(var(--color-ink-900)) 62%);
+}
+
+/* The bound edge of the cover board. */
+.dossier-cover-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  pointer-events: none;
+}
+
+.dossier-cover-band.is-spine-left {
+  left: 0;
+  border-right: 1px solid color-mix(in srgb, var(--project-accent) 22%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--project-accent) 16%, transparent), transparent);
+}
+
+.dossier-cover-band.is-spine-right {
+  right: 0;
+  border-left: 1px solid color-mix(in srgb, var(--project-accent) 22%, transparent);
+  background: linear-gradient(270deg, color-mix(in srgb, var(--project-accent) 16%, transparent), transparent);
+}
+
+.dossier-open {
+  border: 1px solid color-mix(in srgb, var(--project-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--project-accent) 8%, transparent);
+  transition: background-color 250ms ease, border-color 250ms ease;
+}
+
+.dossier-open:hover {
+  border-color: color-mix(in srgb, var(--project-accent) 60%, transparent);
+  background: color-mix(in srgb, var(--project-accent) 14%, transparent);
+}
+
+.dossier-open svg {
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dossier-open:hover svg {
+  transform: translateX(3px);
+}
+
+.dossier-leader {
+  border-bottom: 1px dotted rgb(var(--color-line) / 0.18);
+  transform: translateY(-4px);
+}
+
+.dossier-contents-entry:hover .dossier-leader {
+  border-bottom-color: color-mix(in srgb, var(--project-accent) 50%, transparent);
+}
+
+.dossier-step-number {
+  z-index: 1;
+  background: var(--book-page);
+}
+
+.dossier-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  bottom: -6px;
+  left: 11.5px;
+  width: 1px;
+  background: color-mix(in srgb, var(--project-accent) 28%, transparent);
+}
+
+.dossier-chapter[aria-current='true'] {
+  border-color: color-mix(in srgb, var(--project-accent) 36%, transparent);
+  background: color-mix(in srgb, var(--project-accent) 9%, transparent);
+  color: var(--project-accent);
+}
+
+.dossier-index-row {
+  transition: border-color 250ms ease, background-color 250ms ease;
+}
+
+.dossier-index-row:hover {
+  border-color: color-mix(in srgb, var(--project-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--project-accent) 6%, transparent);
+}
+
+/* Book cover type is sized to the cover itself (a size container), so it reads the
+   same on the small floating book and on the full-size page. */
+.book-cover {
+  padding: 8.5cqw 9cqw;
+}
+
+.book-cover-meta {
+  font-size: clamp(9px, 2.6cqw, 12px);
+}
+
+.book-cover-title {
+  font-size: clamp(1.45rem, 9.4cqw, 2.6rem);
+}
+
+.book-cover-text {
+  font-size: clamp(0.78rem, 3.35cqw, 0.95rem);
+}
+
+/* The closed Featured Work book floating in the section: a real box with a
+   cover, spine, page block and back board, posed to show its spine. */
+.featured-book-scene {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 36px 0 72px;
+  perspective: 1800px;
+  transition: opacity 200ms ease;
+}
+
+.featured-book-scene::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  width: 70%;
+  height: 60%;
+  border-radius: 50%;
+  background: rgb(var(--color-signal) / 0.1);
+  filter: blur(70px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.featured-book-pose,
+.featured-book-float {
+  transform-style: preserve-3d;
+}
+
+/* Turned to show the page block, so a lifting cover visibly opens onto a page. */
+.featured-book-pose {
+  transform: rotateY(-22deg) rotateX(-6deg);
+}
+
+.featured-book-float {
+  animation: featured-book-float 6.5s ease-in-out infinite;
+}
+
+.featured-book {
+  --book-depth: 30px;
+  position: relative;
+  width: min(360px, 68vw);
+  aspect-ratio: 440 / 620;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.featured-book > * {
+  position: absolute;
+}
+
+.featured-book-cover {
+  inset: 0;
+  overflow: hidden;
+  border-radius: 3px 12px 12px 3px;
+  box-shadow: inset 0 0 0 1px rgb(var(--color-line) / 0.08);
+  container-type: inline-size;
+  transform-origin: left center;
+  transform: translateZ(calc(var(--book-depth) / 2));
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.featured-book.is-peeking .featured-book-cover {
+  transform: translateZ(calc(var(--book-depth) / 2)) rotateY(-32deg);
+}
+
+/* First page, seen when the cover lifts. */
+.featured-book-page {
+  top: 4px;
+  right: 5px;
+  bottom: 4px;
+  left: 2px;
+  border-radius: 2px 8px 8px 2px;
+  background: linear-gradient(90deg, var(--book-gutter), transparent 10%),
+    repeating-linear-gradient(180deg, transparent 0 22px, rgb(var(--color-line) / 0.05) 22px 23px), var(--book-page);
+  transform: translateZ(calc(var(--book-depth) / 2 - 1px));
+}
+
+.featured-book-back {
+  inset: 0;
+  border-radius: 12px 3px 3px 12px;
+  background: linear-gradient(165deg, color-mix(in srgb, rgb(var(--color-signal)) 6%, rgb(var(--color-ink-900))), rgb(var(--color-ink-900)));
+  box-shadow: inset 0 0 0 1px rgb(var(--color-line) / 0.08);
+  transform: translateZ(calc(var(--book-depth) / -2)) rotateY(180deg);
+}
+
+.featured-book-spine {
+  top: 0;
+  left: calc(var(--book-depth) / -2);
+  display: grid;
+  width: var(--book-depth);
+  height: 100%;
+  place-items: center;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(var(--color-ink-900)), color-mix(in srgb, rgb(var(--color-signal)) 12%, rgb(var(--color-ink-800))) 50%, rgb(var(--color-ink-900)));
+  box-shadow: inset 0 0 0 1px rgb(var(--color-line) / 0.08);
+  transform: rotateY(-90deg);
+}
+
+.featured-book-spine span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(var(--color-signal));
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* Edges of the page block, inset a little from the cover boards. */
+.featured-book-block.is-right {
+  top: 5px;
+  right: calc(5px - (var(--book-depth) - 2px) / 2);
+  bottom: 5px;
+  width: calc(var(--book-depth) - 2px);
+  background: repeating-linear-gradient(90deg, var(--book-edge) 0 1px, var(--book-edge-alt) 1px 3px);
+  transform: rotateY(90deg);
+}
+
+.featured-book-block.is-top,
+.featured-book-block.is-bottom {
+  right: 5px;
+  left: 2px;
+  height: calc(var(--book-depth) - 2px);
+  background: repeating-linear-gradient(180deg, var(--book-edge) 0 1px, var(--book-edge-alt) 1px 3px);
+}
+
+.featured-book-block.is-top {
+  top: calc(4px - (var(--book-depth) - 2px) / 2);
+  transform: rotateX(90deg);
+}
+
+.featured-book-block.is-bottom {
+  bottom: calc(4px - (var(--book-depth) - 2px) / 2);
+  transform: rotateX(-90deg);
+}
+
+.featured-book-shadow {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  width: min(300px, 58vw);
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+  filter: blur(6px);
+  transform: translateX(-50%);
+  animation: featured-book-shadow 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes featured-book-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes featured-book-shadow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(0.86);
+  }
+}
+
+.featured-index-row {
+  transition: border-color 300ms ease, background-color 300ms ease, transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.featured-index-row:hover {
+  border-color: color-mix(in srgb, var(--project-accent) 34%, transparent);
+  background: color-mix(in srgb, var(--project-accent) 5%, rgb(var(--color-ink-800) / 0.6));
+  transform: translateX(4px);
+}
+
+.featured-index-row:hover .project-glyph::after {
+  border-color: color-mix(in srgb, var(--project-accent) 35%, transparent);
+  transform: rotate(7deg) scale(1.08);
+}
+
+.featured-index-row:hover .featured-index-arrow {
+  color: var(--project-accent);
 }
 
 .nav-shell::before {
@@ -1188,8 +1743,7 @@ h4 {
 }
 
 [data-theme='light'] .nav-cta,
-[data-theme='light'] .magnetic-button-primary,
-[data-theme='light'] .project-button {
+[data-theme='light'] .magnetic-button-primary {
   color: var(--on-accent);
 }
 
@@ -1207,7 +1761,6 @@ h4 {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.32), transparent 22%, transparent 78%, rgba(15, 23, 42, 0.012));
 }
 
-[data-theme='light'] .project-card,
 [data-theme='light'] .about-board,
 [data-theme='light'] .about-identity,
 [data-theme='light'] .about-strengths,
@@ -1220,19 +1773,13 @@ h4 {
   box-shadow: 0 8px 30px rgba(15, 23, 42, 0.055), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-[data-theme='light'] .project-card:hover,
 [data-theme='light'] .why-attribute:hover,
 [data-theme='light'] .approach-step:hover {
   box-shadow: 0 12px 40px rgba(15, 23, 42, 0.085), 0 0 34px color-mix(in srgb, var(--project-accent, #ff8a3d) 3%, transparent);
 }
 
-[data-theme='light'] .project-card .project-button:last-child {
-  color: #fff;
-}
-
 [data-theme='light'] .project-card-grid,
 [data-theme='light'] .project-modal-grid,
-[data-theme='light'] .project-modal-intro::after,
 [data-theme='light'] .approach-board-grid,
 [data-theme='light'] .about-profile-grid,
 [data-theme='light'] .why-visual-grid {
@@ -1249,30 +1796,26 @@ h4 {
   background-color: rgba(255, 138, 61, 0.045);
 }
 
-[data-theme='light'] .project-modal {
-  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.2), inset 0 1px 0 #fff;
-  scrollbar-color: color-mix(in srgb, var(--project-accent) 48%, #b8c0cc) #f5f6f8;
-}
-
-[data-theme='light'] .project-modal-scroll::-webkit-scrollbar-thumb {
-  border-color: #fff;
-  background: color-mix(in srgb, var(--project-accent) 48%, #b8c0cc);
-}
-
-[data-theme='light'] .project-view-tab:hover {
-  border-color: rgba(15, 23, 42, 0.16);
-  background: #f8f9fb;
-}
-
-[data-theme='light'] .project-view-tab.is-active {
-  background: linear-gradient(115deg, color-mix(in srgb, var(--tab-accent) 7%, #fff), #f8f9fb);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06), inset 0 1px 0 #fff;
-}
-
-[data-theme='light'] .project-view-tab:hover .project-view-icon,
-[data-theme='light'] .project-view-tab.is-active .project-view-icon,
 [data-theme='light'] .project-skill-pill:hover {
-  background: color-mix(in srgb, var(--tab-accent, var(--project-accent)) 6%, #fff);
+  background: color-mix(in srgb, var(--project-accent) 6%, #fff);
+}
+
+[data-theme='light'] .featured-book-shadow {
+  background: radial-gradient(closest-side, rgba(15, 23, 42, 0.3), transparent);
+}
+
+[data-theme='light'] .flipbook-book,
+[data-theme='light'] .featured-book {
+  --book-edge: #d8dde4;
+  --book-edge-alt: #f8f9fb;
+  --book-gutter: rgba(15, 23, 42, 0.13);
+  --book-shade: rgba(15, 23, 42, 0.3);
+  --book-lift: rgba(15, 23, 42, 0.2);
+  --book-shadow: 0 40px 64px -32px rgba(15, 23, 42, 0.5), 0 14px 36px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme='light'] .dossier-chapter[aria-current='true'] {
+  background: color-mix(in srgb, var(--project-accent) 7%, #fff);
 }
 
 [data-theme='light'] .stack-core,
