@@ -1,17 +1,24 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
 
-  base: "/portfolio/",
+  return {
+    plugins: [react()],
 
-  server: {
-    port: 5173,
-  },
+    base: "/portfolio/",
 
-  build: {
-    target: "es2020",
-    sourcemap: false,
-  },
+    server: {
+      port: 5173,
+      proxy: {
+        "/api": `http://localhost:${env.PORT || 5000}`,
+      },
+    },
+
+    build: {
+      target: "es2020",
+      sourcemap: false,
+    },
+  };
 });

@@ -22,10 +22,19 @@ Framer Motion and Lenis smooth scrolling. Live at <https://jaiminkatva.github.io
 ```bash
 npm install
 npm run dev       # http://localhost:5173/portfolio/
+npm run dev:api   # http://localhost:5000/api/v1 (requires MongoDB + .env)
+npm run seed:admin
+npm run seed:projects
 npm run lint
 npm run build     # outputs to dist/
 npm run preview   # serves the production build
 ```
+
+The admin panel is available at `http://localhost:5173/portfolio/admin` after both the frontend and API are running. The hash-based `/portfolio/#/admin` address is also supported for static hosts such as GitHub Pages. Site copy published from the admin is loaded by the existing frontend components without changing their design. The public projects section reads published projects from the API with the checked-in content as an outage fallback, and the contact form stores submissions in the admin enquiry inbox.
+
+## Backend API
+
+The Express/MongoDB backend lives in `server/` and follows a feature-module architecture. It includes admin authentication, project CRUD, contact enquiry capture, validation, rate limiting, security headers and centralized error handling. See [`server/README.md`](server/README.md) for setup and routes.
 
 The site is served from the `/portfolio/` sub-path (see `base` in `vite.config.js`). Deploy the contents of
 `dist/` after every build.

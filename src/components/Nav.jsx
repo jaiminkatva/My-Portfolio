@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import useTheme from "../hooks/useTheme";
 import SystemIcon from "./shared/SystemIcon";
+import { identity } from "../data/content";
 
 const LINKS = [
   { href: "#about", label: "About" },
@@ -100,10 +101,10 @@ export default function Nav() {
             <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="" width="28" height="24" className="relative h-full w-full object-contain" />
           </span>
           <span className="hidden min-w-0 sm:block">
-            <span className="block text-sm leading-none text-paper">Jaimin Katva</span>
+            <span className="block text-sm leading-none text-paper">{identity.name}</span>
             <span className="mt-1.5 flex items-center gap-1.5 whitespace-nowrap font-mono text-xs font-normal leading-none tracking-wide text-paper-faint">
               <span className="h-1.5 w-1.5 rounded-full bg-system" />
-              Backend Engineer · Team Lead
+              {identity.title}
             </span>
           </span>
         </a>

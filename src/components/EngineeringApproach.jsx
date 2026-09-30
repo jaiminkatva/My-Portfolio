@@ -26,7 +26,7 @@ export default function EngineeringApproach() {
 
       <div className="relative mx-auto max-w-content px-6 md:px-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_390px] lg:items-end">
-          <SectionHeading eyebrow={engineeringPhilosophy.eyebrow} heading="From problem to working product." />
+          <SectionHeading eyebrow={engineeringPhilosophy.eyebrow} heading={engineeringPhilosophy.heading} />
           <p className="text-base leading-[1.8] text-paper-dim">{engineeringPhilosophy.intro}</p>
         </div>
 
@@ -60,7 +60,7 @@ export default function EngineeringApproach() {
             <div className="approach-pipeline relative p-5 sm:p-7 lg:p-10">
               <ol className="approach-grid relative grid gap-4 lg:grid-cols-2 lg:grid-rows-3">
                 {engineeringPhilosophy.steps.map((step, index) => {
-                  const Icon = stepIcons[index];
+                  const Icon = stepIcons[index % stepIcons.length];
                   return (
                     <motion.li
                       key={step.key}
@@ -68,7 +68,7 @@ export default function EngineeringApproach() {
                       whileInView={{ opacity: 1, x: 0, y: 0 }}
                       viewport={{ once: true, margin: '-45px' }}
                       transition={{ duration: reduceMotion ? 0 : 0.65, delay: index * 0.09, ease: [0.16, 1, 0.3, 1] }}
-                      className={`approach-step group relative z-10 min-h-[150px] rounded-2xl border border-line/[0.08] bg-ink-800/95 p-5 ${positions[index]}`}
+                      className={`approach-step group relative z-10 min-h-[150px] rounded-2xl border border-line/[0.08] bg-ink-800/95 p-5 ${positions[index] || ''}`}
                     >
                       {links[index] && (
                         <span className={`approach-link approach-link-${links[index]}`} style={{ '--step': index }} aria-hidden="true">

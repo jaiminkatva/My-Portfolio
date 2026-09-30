@@ -5,16 +5,30 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:api": "node --watch server/server.js",
+    "start:api": "node server/server.js",
+    "seed:admin": "node server/scripts/seedAdmin.js",
+    "seed:projects": "node server/scripts/seedProjects.js",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src"
+    "lint": "eslint src server"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
     "framer-motion": "^11.11.17",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
     "lenis": "^1.1.16",
+    "mongoose": "^9.10.2",
+    "morgan": "^1.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.7.0"
+    "react-icons": "^5.7.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.3",

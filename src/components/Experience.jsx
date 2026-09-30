@@ -3,14 +3,12 @@ import { experience, leadership } from '../data/content';
 import SectionHeading from './shared/SectionHeading';
 import SystemIcon from './shared/SystemIcon';
 
-// Dates stay hidden until they are confirmed in content.js.
-const period = experience.period.startsWith('TODO') ? null : experience.period;
-
 export default function Experience() {
+  const period = experience.period.startsWith('TODO') ? null : experience.period;
   return (
     <section id="experience" className="section-shell relative overflow-hidden border-t border-line/[0.06] py-20 md:py-28">
       <div className="relative mx-auto max-w-content px-6 md:px-10">
-        <SectionHeading eyebrow={experience.eyebrow} heading="Backend ownership, from plan to production." body="A hands-on role spanning implementation, technical direction, releases and team delivery." />
+        <SectionHeading eyebrow={experience.eyebrow} heading={experience.heading} body={experience.intro} />
 
         <motion.article
           initial={{ opacity: 0, y: 25 }}

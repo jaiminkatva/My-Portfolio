@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { identity, services } from '../data/content';
+import { identity, services, servicesMeta } from '../data/content';
 import SectionHeading from './shared/SectionHeading';
 import SystemIcon from './shared/SystemIcon';
 
@@ -14,8 +14,8 @@ export default function Services() {
     <section id="services" className="section-shell relative overflow-hidden border-t border-line/[0.06] py-20 md:py-28">
       <div className="relative mx-auto max-w-content px-6 md:px-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_340px] lg:items-end">
-          <SectionHeading eyebrow="Engineering Capabilities" heading="Focused expertise across the system lifecycle." />
-          <p className="text-base leading-[1.75] text-paper-dim">Capabilities shaped by owning backend products from system planning and implementation through integration, infrastructure and team delivery.</p>
+          <SectionHeading eyebrow={servicesMeta.eyebrow} heading={servicesMeta.heading} />
+          <p className="text-base leading-[1.75] text-paper-dim">{servicesMeta.body}</p>
         </div>
 
         <ul className="mt-12 border-t border-line/[0.09]">

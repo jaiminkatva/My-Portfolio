@@ -185,6 +185,16 @@ h4 {
   text-wrap: balance;
 }
 
+.inquiry-mobile-back {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .inquiry-mobile-back {
+    display: inline-flex;
+  }
+}
+
 .hero-shell::before {
   content: '';
   position: absolute;

@@ -31,6 +31,8 @@ export default function Hero() {
   const smoothY = useSpring(pointerY, { stiffness: 55, damping: 20 });
   const visualX = useTransform(smoothX, [-0.5, 0.5], [-12, 12]);
   const visualY = useTransform(smoothY, [-0.5, 0.5], [-10, 10]);
+  const headlineWords = hero.headline.trim().split(/\s+/);
+  const headlineBreak = Math.max(headlineWords.length - 3, 1);
 
   function handlePointerMove(event) {
     if (reduceMotion || !sectionRef.current) return;
@@ -62,8 +64,8 @@ export default function Hero() {
           </motion.div>
 
           <motion.h1 variants={item} className="max-w-[760px] font-display text-[clamp(3rem,7vw,6.2rem)] font-medium leading-[0.94] tracking-[-0.055em] text-paper">
-            I build reliable systems
-            <span className="hero-gradient-text block pb-2">that power products.</span>
+            {headlineWords.slice(0, headlineBreak).join(' ')}
+            <span className="hero-gradient-text block pb-2">{headlineWords.slice(headlineBreak).join(' ')}</span>
           </motion.h1>
 
           <motion.p variants={item} className="mt-6 max-w-xl text-base leading-relaxed text-paper-dim sm:text-lg">

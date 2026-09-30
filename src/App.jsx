@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
 import useLenis from './hooks/useLenis';
 import Nav from './components/Nav';
@@ -12,9 +13,26 @@ import Services from './components/Services';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CursorDot from './components/shared/CursorDot';
+import { applySiteContent } from './data/content';
+import { portfolioApi } from './lib/api';
 
 export default function App() {
+  const [, setContentRevision] = useState(0);
   useLenis();
+
+  useEffect(() => {
+    let active = true;
+    portfolioApi.getContent()
+      .then((content) => {
+        if (!active || !content) return;
+        applySiteContent(content);
+        setContentRevision((revision) => revision + 1);
+      })
+      .catch(() => {
+        // Checked-in copy remains visible when the content API is unavailable.
+      });
+    return () => { active = false; };
+  }, []);
 
   return (
     <MotionConfig reducedMotion="user">

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { TbBinaryTree, TbBriefcase, TbRocket, TbTopologyStar3, TbUsers } from "react-icons/tb";
-import { about } from "../data/content";
+import { about, identity } from "../data/content";
 import SectionHeading from "./shared/SectionHeading";
 
 const storyIcons = [TbBriefcase, TbBinaryTree, TbTopologyStar3];
@@ -40,11 +40,11 @@ function ProfileCard() {
         <div className="absolute right-0 top-0 h-24 w-24 border-b border-l border-line/[0.05] bg-signal/[0.035] [clip-path:polygon(100%_0,100%_100%,0_0)]" />
         <div className="flex items-center gap-5">
           <div className="about-monogram grid h-20 w-20 shrink-0 place-items-center overflow-hidden rounded-2xl border border-signal/25 p-2.5">
-            <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="Jaimin Katva logo" width="60" height="52" className="h-full w-full object-contain" />
+            <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt={`${identity.name} logo`} width="60" height="52" className="h-full w-full object-contain" />
           </div>
           <div>
-            <h3 className="font-display text-2xl font-medium text-paper">Jaimin Katva</h3>
-            <p className="mt-1 text-base text-paper-dim">Backend Engineer · Team Lead</p>
+            <h3 className="font-display text-2xl font-medium text-paper">{identity.name}</h3>
+            <p className="mt-1 text-base text-paper-dim">{identity.title}</p>
           </div>
         </div>
 
@@ -90,7 +90,7 @@ function StoryPanel() {
       <div className="relative mt-2">
         <span className="about-story-line absolute bottom-7 left-[21px] top-7 w-px" aria-hidden="true" />
         {about.paragraphs.map((paragraph, index) => {
-          const Icon = storyIcons[index];
+          const Icon = storyIcons[index % storyIcons.length];
           return (
             <motion.article
               key={paragraph}
@@ -105,7 +105,7 @@ function StoryPanel() {
               </span>
               <div>
                 <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-xs uppercase tracking-[0.14em] text-system">{storyLabels[index]}</span>
+                  <span className="font-mono text-xs uppercase tracking-[0.14em] text-system">{storyLabels[index] || `Story ${index + 1}`}</span>
                   <span className="font-mono text-xs text-paper-faint">0{index + 1}</span>
                 </div>
                 <p className={`mt-2 text-base leading-[1.75] ${index === 0 ? "text-paper" : "text-paper-dim"}`}>{paragraph}</p>
@@ -125,7 +125,7 @@ export default function About() {
 
       <div className="relative mx-auto max-w-content px-6 md:px-10">
         <div className="grid gap-8 lg:grid-cols-[1fr_390px] lg:items-end">
-          <SectionHeading eyebrow={about.eyebrow} heading="Technology built around real needs." />
+          <SectionHeading eyebrow={about.eyebrow} heading={about.heading} />
           <motion.div
             variants={reveal}
             initial="hidden"
@@ -135,7 +135,7 @@ export default function About() {
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-signal/20 bg-signal/[0.07] text-signal">
               <TbTopologyStar3 className="h-5 w-5" />
             </span>
-            <p className="text-base leading-relaxed text-paper-dim">Backend engineering, system planning and product thinking—working together.</p>
+            <p className="text-base leading-relaxed text-paper-dim">{about.intro}</p>
           </motion.div>
         </div>
 
@@ -147,7 +147,7 @@ export default function About() {
           className="about-board mt-11 overflow-hidden rounded-[1.75rem] border border-line/[0.09] bg-ink-800/70">
           <div className="flex min-h-14 items-center justify-between border-b border-line/[0.08] bg-ink-900/45 px-5 sm:px-7">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">About Jaimin</span>
+              <span className="font-mono text-xs uppercase tracking-[0.16em] text-signal">About {identity.name.split(' ')[0]}</span>
               <span className="hidden h-px w-10 bg-gradient-to-r from-signal/60 to-transparent sm:block" />
               <span className="hidden font-mono text-xs text-paper-faint sm:block">profile / approach / experience</span>
             </div>
@@ -164,7 +164,7 @@ export default function About() {
 
         <div className="about-strengths mt-5 grid overflow-hidden rounded-2xl border border-line/[0.08] bg-ink-800/55 sm:grid-cols-2 lg:grid-cols-4">
           {about.distinctive.map((line, index) => {
-            const Icon = strengthIcons[index];
+            const Icon = strengthIcons[index % strengthIcons.length];
             return (
               <motion.article
                 key={line}
@@ -177,7 +177,7 @@ export default function About() {
                 <span className="grid h-10 w-10 place-items-center rounded-xl border border-system/20 bg-system/[0.055] text-system">
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="mt-5 font-display text-lg font-medium text-paper">{strengthTitles[index]}</h3>
+                <h3 className="mt-5 font-display text-lg font-medium text-paper">{strengthTitles[index] || `Strength ${index + 1}`}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-paper-dim">{line}</p>
               </motion.article>
             );

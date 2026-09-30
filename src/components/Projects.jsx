@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { TbArrowLeft, TbArrowRight, TbInfoCircle, TbRouteAltLeft } from "react-icons/tb";
-import { projects } from "../data/content";
+import { projects as fallbackProjects } from "../data/content";
+import { portfolioApi } from "../lib/api";
 import { getLenis } from "../hooks/useLenis";
 import Flipbook, { FLIP_MS, pageToView, useSpreadLayout, viewCount, viewToPage, visiblePages } from "./shared/Flipbook";
 import TechnologyMark from "./shared/TechnologyMark";
@@ -29,16 +30,64 @@ const PROJECT_PAGES = [
   { id: "result", view: "case" },
 ];
 
+// Keep directory-style pages readable inside the fixed-size book. Extra
+// projects flow onto another sheet instead of overflowing the page edge.
+const DIRECTORY_ITEMS_PER_PAGE = 5;
+
 // The Featured Work book: cover, contents, every project in turn, a summary and the back cover.
-const PAGES = [
+const ProjectBookContext = createContext(null);
+
+const directoryPages = (id, projectCount) =>
+  Array.from({ length: Math.ceil(projectCount / DIRECTORY_ITEMS_PER_PAGE) }, (_, directoryPage) => ({
+    id,
+    directoryPage,
+    projectIndexes: Array.from(
+      { length: Math.min(DIRECTORY_ITEMS_PER_PAGE, projectCount - directoryPage * DIRECTORY_ITEMS_PER_PAGE) },
+      (_, item) => directoryPage * DIRECTORY_ITEMS_PER_PAGE + item,
+    ),
+  }));
+
+const buildPages = (projects) => [
   { id: "cover" },
-  { id: "contents" },
+  ...directoryPages("contents", projects.length),
   ...projects.flatMap((_, project) => PROJECT_PAGES.map((page) => ({ ...page, project }))),
-  { id: "index" },
+  ...directoryPages("index", projects.length),
   { id: "back" },
 ];
 
-const pageIndex = (id, project) => PAGES.findIndex((page) => page.id === id && page.project === project);
+const pageIndex = (pages, id, project) => pages.findIndex((page) => page.id === id && page.project === project);
+const projectAccent = (index) => accents[index % accents.length];
+
+function useProjectBook() {
+  return useContext(ProjectBookContext);
+}
+
+function normalizeProject(project, index) {
+  return {
+    ...project,
+    id: project.slug || project._id,
+    index: pad(index + 1),
+    name: project.shortTitle || project.title,
+    fullTitle: project.title,
+    tags: project.tags?.length ? project.tags : (project.technologies || []).slice(0, 4),
+    allTags: project.technologies || [],
+    role: project.responsibilities || [],
+    modules: project.modules || [],
+    usp: {
+      title: project.usp?.title || project.caseStudy?.outcome || project.title,
+      body: project.usp?.body || project.summary,
+    },
+    caseStudy: {
+      problem: "",
+      architecture: "",
+      challenge: "",
+      solution: "",
+      workflow: [],
+      outcome: "",
+      ...project.caseStudy,
+    },
+  };
+}
 const pad = (number) => String(number).padStart(2, "0");
 
 // How long the book takes to fly from the section to the reader before its cover opens.
@@ -139,6 +188,30 @@ function ProductionMark({ accent }) {
   );
 }
 
+function ProjectActions({ project, compact = false }) {
+  const links = [
+    project.projectUrl && { href: project.projectUrl, label: compact ? 'Live' : 'View live project' },
+    project.repositoryUrl && { href: project.repositoryUrl, label: compact ? 'Code' : 'View repository' },
+  ].filter(Boolean);
+
+  if (!links.length) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-2" aria-label="Project links">
+      {links.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          target="_blank"
+          rel="noreferrer"
+          onClick={(event) => event.stopPropagation()}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-line/[0.1] bg-line/[0.035] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-paper-dim transition-colors hover:border-signal/30 hover:text-signal">
+          {link.label} <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
 function ChapterHeading({ view, accent }) {
   const { Icon } = view;
   return (
@@ -183,6 +256,7 @@ function DossierPage({ accent, side, number, head, chapter, footer, children }) 
 // Front cover of the Featured Work book: the section's title and description. Sized in
 // container units, so the same cover works on the floating book and on the reader's page.
 function BookCover({ Heading = "p", onOpen }) {
+  const { projects } = useProjectBook();
   return (
     <div className="dossier-cover book-cover relative flex h-full min-h-full flex-col overflow-hidden" style={{ "--project-accent": BOOK_ACCENT }}>
       <div className="project-modal-grid pointer-events-none absolute inset-0 opacity-60" />
@@ -193,12 +267,12 @@ function BookCover({ Heading = "p", onOpen }) {
       <span className="dossier-cover-band is-spine-left" />
       <div className="book-cover-meta relative flex items-center justify-between gap-3 font-mono uppercase tracking-[0.16em]">
         <span className="text-signal">Featured Work</span>
-        <span className="text-paper-faint">01—04</span>
+        <span className="text-paper-faint">01—{pad(projects.length)}</span>
       </div>
       <div className="relative mt-auto pt-[6cqw]">
         <div className="flex gap-[2.5cqw]">
           {projects.map((project, i) => (
-            <ProjectGlyph key={project.id} index={i} accent={accents[i]} small />
+            <ProjectGlyph key={project.id} index={i % 4} accent={projectAccent(i)} small />
           ))}
         </div>
         <Heading className="book-cover-title mt-[7cqw] font-display font-medium leading-[1.06] tracking-[-0.035em] text-paper">
@@ -228,6 +302,7 @@ function BookCover({ Heading = "p", onOpen }) {
 }
 
 function BackCoverPage({ side }) {
+  const { projects } = useProjectBook();
   return (
     <div
       className={`dossier-cover relative flex min-h-full flex-col overflow-hidden ${side === "single" ? "px-7 py-7" : "px-10 py-9"}`}
@@ -237,12 +312,12 @@ function BackCoverPage({ side }) {
       <span className={`dossier-cover-band ${side === "left" ? "is-spine-right" : "is-spine-left"}`} />
       <div className="relative flex items-center justify-between gap-4 font-mono text-xs uppercase tracking-[0.16em]">
         <span className="text-signal">Featured Work</span>
-        <span className="text-paper-faint">01—04</span>
+        <span className="text-paper-faint">01—{pad(projects.length)}</span>
       </div>
       <div className="relative my-auto py-10">
         <div className="flex gap-2.5">
           {projects.map((project, i) => (
-            <ProjectGlyph key={project.id} index={i} accent={accents[i]} small />
+            <ProjectGlyph key={project.id} index={i % 4} accent={projectAccent(i)} small />
           ))}
         </div>
         <p className="mt-8 font-display text-2xl font-medium leading-tight text-paper">Built for real-world use.</p>
@@ -257,6 +332,7 @@ function BackCoverPage({ side }) {
 
 // A project's opening page: what its card on the page used to show.
 function ProjectTitlePage({ project, accent, index, side }) {
+  const { projects } = useProjectBook();
   return (
     <div
       className={`dossier-cover relative flex min-h-full flex-col overflow-hidden ${side === "single" ? "px-7 py-7" : "px-10 py-9"}`}
@@ -271,7 +347,7 @@ function ProjectTitlePage({ project, accent, index, side }) {
         </span>
       </div>
       <div className="relative mt-auto pt-10">
-        <ProjectGlyph index={index} accent={accent} />
+        <ProjectGlyph index={index % 4} accent={accent} />
         <span className="mt-7 block font-mono text-xs uppercase tracking-[0.16em]" style={{ color: accent }}>
           {project.category}
         </span>
@@ -285,8 +361,9 @@ function ProjectTitlePage({ project, accent, index, side }) {
           ))}
         </ul>
       </div>
-      <div className="relative mt-9 border-t border-line/[0.08] pt-5">
+      <div className="relative mt-9 flex flex-wrap items-center justify-between gap-3 border-t border-line/[0.08] pt-5">
         <ProductionMark accent={accent} />
+        <ProjectActions project={project} compact />
       </div>
     </div>
   );
@@ -305,58 +382,66 @@ function ContentsEntry({ number, label, page, accent, onSelect }) {
   );
 }
 
-function ContentsPage({ goTo }) {
+function ContentsPage({ goTo, projectIndexes }) {
+  const { projects, pages } = useProjectBook();
   return (
     <>
       <h4 className="font-display text-[1.6rem] font-medium leading-tight text-paper">Selected systems</h4>
       <ol className="mt-7 grid gap-5">
-        {projects.map((project, i) => (
-          <li key={project.id} style={{ "--project-accent": accents[i] }}>
-            <ContentsEntry number={project.index} label={project.name} page={pageIndex("title", i)} accent={accents[i]} onSelect={goTo} />
-            <p className="ml-9 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">{project.category}</p>
-            <div className="ml-9 mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
-              {VIEWS.map((view) => (
-                <button
-                  key={view.key}
-                  type="button"
-                  onClick={() => goTo(pageIndex(view.page, i))}
-                  className="dossier-contents-entry group inline-flex items-baseline gap-2 text-sm text-paper-dim transition-colors hover:text-paper">
-                  {view.short}
-                  <span className="font-mono text-xs text-paper-faint">{pad(pageIndex(view.page, i) + 1)}</span>
-                </button>
-              ))}
-            </div>
-          </li>
-        ))}
+        {projectIndexes.map((i) => {
+          const project = projects[i];
+          return (
+            <li key={project.id} style={{ "--project-accent": projectAccent(i) }}>
+              <ContentsEntry number={project.index} label={project.name} page={pageIndex(pages, "title", i)} accent={projectAccent(i)} onSelect={goTo} />
+              <p className="ml-9 font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">{project.category}</p>
+              <div className="ml-9 mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
+                {VIEWS.map((view) => (
+                  <button
+                    key={view.key}
+                    type="button"
+                    onClick={() => goTo(pageIndex(pages, view.page, i))}
+                    className="dossier-contents-entry group inline-flex items-baseline gap-2 text-sm text-paper-dim transition-colors hover:text-paper">
+                    {view.short}
+                    <span className="font-mono text-xs text-paper-faint">{pad(pageIndex(pages, view.page, i) + 1)}</span>
+                  </button>
+                ))}
+              </div>
+            </li>
+          );
+        })}
       </ol>
     </>
   );
 }
 
 // Closing summary: each project's key benefit, one tap from its chapter.
-function IndexPage({ goTo }) {
+function IndexPage({ goTo, projectIndexes }) {
+  const { projects, pages } = useProjectBook();
   return (
     <>
       <h4 className="font-display text-[1.6rem] font-medium leading-tight text-paper">Key benefit</h4>
       <ol className="mt-6 grid gap-3">
-        {projects.map((project, i) => (
-          <li key={project.id}>
-            <button
-              type="button"
-              onClick={() => goTo(pageIndex("title", i))}
-              className="dossier-index-row group flex w-full items-start gap-4 rounded-xl border border-line/[0.08] bg-line/[0.02] p-3.5 text-left"
-              style={{ "--project-accent": accents[i] }}>
-              <span className="pt-0.5 font-mono text-xs" style={{ color: accents[i] }}>
-                {project.index}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">{project.name}</span>
-                <span className="mt-1 block font-display text-base font-medium leading-snug text-paper">{project.usp.title}</span>
-              </span>
-              <span className="pt-0.5 font-mono text-xs text-paper-faint">{pad(pageIndex("title", i) + 1)}</span>
-            </button>
-          </li>
-        ))}
+        {projectIndexes.map((i) => {
+          const project = projects[i];
+          return (
+            <li key={project.id}>
+              <button
+                type="button"
+                onClick={() => goTo(pageIndex(pages, "title", i))}
+                className="dossier-index-row group flex w-full items-start gap-4 rounded-xl border border-line/[0.08] bg-line/[0.02] p-3.5 text-left"
+                style={{ "--project-accent": projectAccent(i) }}>
+                <span className="pt-0.5 font-mono text-xs" style={{ color: projectAccent(i) }}>
+                  {project.index}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-paper-faint">{project.name}</span>
+                  <span className="mt-1 block font-display text-base font-medium leading-snug text-paper">{project.usp.title}</span>
+                </span>
+                <span className="pt-0.5 font-mono text-xs text-paper-faint">{pad(pageIndex(pages, "title", i) + 1)}</span>
+              </button>
+            </li>
+          );
+        })}
       </ol>
     </>
   );
@@ -481,14 +566,15 @@ function ResultPage({ project, accent, index }) {
       <DetailBlock number="06" label="Result" title="What the system made possible">
         <p className="font-display text-[1.3rem] leading-[1.5] tracking-[-0.01em] text-paper">{project.caseStudy.outcome}</p>
       </DetailBlock>
-      <div className="mt-auto flex items-center gap-4 border-t border-line/[0.08] pt-5">
-        <ProjectGlyph index={index} accent={accent} />
+      <div className="mt-auto flex flex-wrap items-center gap-4 border-t border-line/[0.08] pt-5">
+        <ProjectGlyph index={index % 4} accent={accent} />
         <div className="min-w-0">
           <span className="block font-mono text-xs uppercase tracking-[0.14em] text-paper-faint">System / {project.index}</span>
           <span className="mt-1.5 block">
             <ProductionMark accent={accent} />
           </span>
         </div>
+        <div className="ml-auto"><ProjectActions project={project} /></div>
       </div>
     </>
   );
@@ -505,7 +591,8 @@ const PAGE_BODIES = {
 };
 
 function DossierSheet({ number, side, goTo, onOpen }) {
-  const { id, project: projectIndex, view } = PAGES[number];
+  const { projects, pages } = useProjectBook();
+  const { id, project: projectIndex, projectIndexes, directoryPage, view } = pages[number];
   if (id === "cover") return <BookCover onOpen={onOpen} />;
   if (id === "back") return <BackCoverPage side={side} />;
   if (id === "contents" || id === "index") {
@@ -516,14 +603,14 @@ function DossierSheet({ number, side, goTo, onOpen }) {
         side={side}
         number={number + 1}
         head="Featured Work"
-        chapter={id === "contents" ? "Contents" : "01—04"}
-        footer="Selected systems / 01—04">
-        <Body goTo={goTo} />
+        chapter={id === "contents" ? `Contents / ${pad(directoryPage + 1)}` : `Index / ${pad(directoryPage + 1)}`}
+        footer={`Selected systems / 01—${pad(projects.length)}`}>
+        <Body goTo={goTo} projectIndexes={projectIndexes} />
       </DossierPage>
     );
   }
   const project = projects[projectIndex];
-  const accent = accents[projectIndex];
+  const accent = projectAccent(projectIndex);
   if (id === "title") return <ProjectTitlePage project={project} accent={accent} index={projectIndex} side={side} />;
   const Body = PAGE_BODIES[id];
   return (
@@ -571,6 +658,7 @@ function arrivalFrom(origin, spread) {
 }
 
 function FeaturedWorkBook({ startPage, origin, onClose }) {
+  const { projects, pages } = useProjectBook();
   const reduceMotion = useReducedMotion();
   const spread = useSpreadLayout();
   // The book arrives closed, then its cover swings open (riffling on to a chosen project).
@@ -582,11 +670,11 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
   onCloseRef.current = onClose;
 
   const view = pageToView(page, spread);
-  const lastView = viewCount(PAGES.length, spread) - 1;
-  const shown = visiblePages(view, PAGES.length, spread);
-  const lead = PAGES[[...shown].reverse().find((number) => PAGES[number].project !== undefined)];
+  const lastView = viewCount(pages.length, spread) - 1;
+  const shown = visiblePages(view, pages.length, spread);
+  const lead = pages[[...shown].reverse().find((number) => pages[number].project !== undefined)];
   const current = lead?.project;
-  const accent = current === undefined ? BOOK_ACCENT : accents[current];
+  const accent = current === undefined ? BOOK_ACCENT : projectAccent(current);
 
   const turnPage = useCallback(
     (step) =>
@@ -652,7 +740,7 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
   const counter = (
     <span className="flex items-center gap-3">
       <span aria-live="polite" className="whitespace-nowrap font-mono text-xs text-paper-dim">
-        {shown.map((number) => pad(number + 1)).join("–")} <span className="text-paper-faint">/ {pad(PAGES.length)}</span>
+        {shown.map((number) => pad(number + 1)).join("–")} <span className="text-paper-faint">/ {pad(pages.length)}</span>
       </span>
       <span className="relative hidden h-px w-16 overflow-hidden bg-line/[0.12] min-[380px]:block" aria-hidden="true">
         <span className="absolute inset-y-0 left-0 transition-[width] duration-500" style={{ width: `${(view / lastView) * 100}%`, background: accent }} />
@@ -689,10 +777,10 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
                     type="button"
                     aria-label={project.name}
                     aria-current={current === i ? "true" : undefined}
-                    onClick={() => setPage(pageIndex("title", i))}
+                    onClick={() => setPage(pageIndex(pages, "title", i))}
                     className="dossier-chapter inline-flex items-center gap-1.5 rounded-lg border border-transparent px-2 py-2 font-mono text-[11px] text-paper-dim transition-colors hover:text-paper"
-                    style={{ "--project-accent": accents[i] }}>
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: accents[i] }} />
+                    style={{ "--project-accent": projectAccent(i) }}>
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: projectAccent(i) }} />
                     {project.index}
                   </button>
                 ))}
@@ -704,7 +792,7 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
                       key={key}
                       type="button"
                       aria-current={lead.view === key ? "true" : undefined}
-                      onClick={() => setPage(pageIndex(start, current))}
+                      onClick={() => setPage(pageIndex(pages, start, current))}
                       className="dossier-chapter inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-transparent px-2 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-paper-dim transition-colors hover:text-paper">
                       <Icon className="h-4 w-4" aria-hidden="true" />
                       <span className="sr-only lg:not-sr-only">{short}</span>
@@ -745,7 +833,7 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
             transition={{ duration: reduceMotion ? 0 : ARRIVE_MS / 1000, ease: [0.16, 1, 0.3, 1] }}
             style={{ transformPerspective: 1800 }}>
             <Flipbook
-              pageCount={PAGES.length}
+              pageCount={pages.length}
               page={page}
               spread={spread}
               renderPage={renderPage}
@@ -772,6 +860,7 @@ function FeaturedWorkBook({ startPage, origin, onClose }) {
 // The closed book floating in the section: it follows the pointer, and its cover lifts
 // when hovered to show there are pages inside.
 function FloatingBook({ hidden, peek, coverRef, onOpen }) {
+  const { projects } = useProjectBook();
   const reduceMotion = useReducedMotion();
   const [hovered, setHovered] = useState(false);
   const tiltX = useMotionValue(0);
@@ -805,7 +894,7 @@ function FloatingBook({ hidden, peek, coverRef, onOpen }) {
           <motion.div className={`featured-book${hovered || peek ? " is-peeking" : ""}`} style={{ rotateX, rotateY }} onClick={onOpen} data-cursor="hover">
             <span className="featured-book-back" />
             <span className="featured-book-spine">
-              <span>Featured Work · 01—04</span>
+              <span>Featured Work · 01—{pad(projects.length)}</span>
             </span>
             <span className="featured-book-block is-right" />
             <span className="featured-book-block is-top" />
@@ -822,12 +911,15 @@ function FloatingBook({ hidden, peek, coverRef, onOpen }) {
   );
 }
 
-export default function Projects() {
+function ProjectsContent() {
+  const { projects, featuredProjects, pages, source } = useProjectBook();
   const [reader, setReader] = useState(null);
   const [peek, setPeek] = useState(false);
   const coverRef = useRef(null);
   const openBook = useCallback((startPage) => setReader({ startPage, origin: coverRef.current?.getBoundingClientRect() }), []);
   const closeBook = useCallback(() => setReader(null), []);
+
+  if (!projects.length) return null;
 
   return (
     <section id="work" className="featured-work relative overflow-hidden border-t b order-ink-600 py-20 md:py-28">
@@ -841,7 +933,7 @@ export default function Projects() {
           className="flex items-center gap-3">
           <span className="font-mono text-xs uppercase tracking-[0.18em] text-signal">Featured Work</span>
           <span className="h-px w-14 bg-gradient-to-r from-signal/70 to-transparent" />
-          <span className="hidden font-mono text-xs uppercase tracking-[0.14em] text-paper-faint sm:inline">Selected systems / 01—04</span>
+          <span className="hidden font-mono text-xs uppercase tracking-[0.14em] text-paper-faint sm:inline">Selected systems / 01—{pad(featuredProjects.length)}</span>
         </motion.div>
 
         <div className="mt-4 grid items-center gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
@@ -868,29 +960,32 @@ export default function Projects() {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}>
             <span className="font-mono text-xs uppercase tracking-[0.16em] text-paper-faint">Contents</span>
             <ol className="mt-4 grid gap-3" onPointerLeave={() => setPeek(false)}>
-              {projects.map((project, index) => (
-                <li key={project.id}>
-                  <button
-                    type="button"
-                    aria-haspopup="dialog"
-                    onClick={() => openBook(pageIndex("title", index))}
-                    onPointerEnter={() => setPeek(true)}
-                    className="featured-index-row group flex w-full items-center gap-4 rounded-2xl border border-line/[0.08] bg-ink-800/60 p-4 text-left backdrop-blur-sm"
-                    style={{ "--project-accent": accents[index] }}>
-                    <ProjectGlyph index={index} accent={accents[index]} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-mono text-[11px] uppercase tracking-[0.14em] text-paper-faint">
-                        System / {project.index} · {project.category}
+              {featuredProjects.map((project) => {
+                const bookIndex = projects.findIndex((item) => item.id === project.id);
+                return (
+                  <li key={project.id}>
+                    <button
+                      type="button"
+                      aria-haspopup="dialog"
+                      onClick={() => openBook(pageIndex(pages, "title", bookIndex))}
+                      onPointerEnter={() => setPeek(true)}
+                      className="featured-index-row group flex w-full items-center gap-4 rounded-2xl border border-line/[0.08] bg-ink-800/60 p-4 text-left backdrop-blur-sm"
+                      style={{ "--project-accent": projectAccent(bookIndex) }}>
+                      <ProjectGlyph index={bookIndex % 4} accent={projectAccent(bookIndex)} />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-mono text-[11px] uppercase tracking-[0.14em] text-paper-faint">
+                          System / {project.index} · {project.category}
+                        </span>
+                        <span className="mt-1 block font-display text-lg font-medium leading-snug text-paper">{project.name}</span>
+                        <span className="mt-0.5 block text-sm text-paper-dim">{project.usp.title}</span>
                       </span>
-                      <span className="mt-1 block font-display text-lg font-medium leading-snug text-paper">{project.name}</span>
-                      <span className="mt-0.5 block text-sm text-paper-dim">{project.usp.title}</span>
-                    </span>
-                    <span className="featured-index-arrow hidden shrink-0 items-center gap-2 font-mono text-xs text-paper-faint sm:inline-flex">
-                      {pad(pageIndex("title", index) + 1)} <ArrowIcon />
-                    </span>
-                  </button>
-                </li>
-              ))}
+                      <span className="featured-index-arrow hidden shrink-0 items-center gap-2 font-mono text-xs text-paper-faint sm:inline-flex">
+                        {pad(pageIndex(pages, "title", bookIndex) + 1)} <ArrowIcon />
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
             </ol>
           </motion.div>
         </div>
@@ -917,6 +1012,46 @@ export default function Projects() {
       <AnimatePresence>
         {reader && <FeaturedWorkBook key="featured-work-book" startPage={reader.startPage} origin={reader.origin} onClose={closeBook} />}
       </AnimatePresence>
+      <span className="sr-only" aria-live="polite">
+        {source === "api" ? "Projects loaded from the portfolio API" : ""}
+      </span>
     </section>
+  );
+}
+
+export default function Projects() {
+  const [projects, setProjects] = useState(fallbackProjects);
+  const [source, setSource] = useState("fallback");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    portfolioApi
+      .listProjects()
+      .then((items) => {
+        if (!controller.signal.aborted) {
+          setProjects(items.map(normalizeProject));
+          setSource("api");
+        }
+      })
+      .catch(() => {
+        // The checked-in content keeps the public portfolio available during API downtime.
+      });
+    return () => controller.abort();
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      projects,
+      featuredProjects: projects.filter((project) => project.featured),
+      pages: buildPages(projects),
+      source,
+    }),
+    [projects, source],
+  );
+
+  return (
+    <ProjectBookContext.Provider value={value}>
+      <ProjectsContent />
+    </ProjectBookContext.Provider>
   );
 }

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { stack } from '../data/content';
+import { stack, stackMeta } from '../data/content';
 import SectionHeading from './shared/SectionHeading';
 import SystemIcon from './shared/SystemIcon';
 import TechnologyMark from './shared/TechnologyMark';
@@ -85,9 +85,9 @@ export default function TechStack() {
       <div className="relative mx-auto max-w-content px-6 md:px-10">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <SectionHeading
-            eyebrow="Technical Stack"
-            heading="A connected system, built from the backend out."
-            body="Backend engineering is the core. Data, infrastructure, geospatial systems and product interfaces connect around it as one delivery architecture."
+            eyebrow={stackMeta.eyebrow}
+            heading={stackMeta.heading}
+            body={stackMeta.body}
           />
           <div className="hidden items-center gap-3 pb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper-faint lg:flex">
             <span className="h-1.5 w-1.5 rounded-full bg-system shadow-[0_0_12px_rgb(var(--color-system)/0.7)]" />
