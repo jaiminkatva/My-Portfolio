@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
 
-    base: "/portfolio/",
+    base: "/My-Portfolio/",
 
     server: {
       port: 5173,
